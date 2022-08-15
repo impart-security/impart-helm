@@ -1,0 +1,75 @@
+initContainers:
+- name: proxy-init
+  image: {{ .Values.proxyinit.image.repository }}
+  imagePullPolicy: {{ .Values.proxyinit.image.pullPolicy }}
+  args: [
+    "--incoming-proxy-port",
+    "4143",
+    "--proxy-uid",
+    "2102",
+    "--inbound-ports-to-ignore",
+    "4190,4191,4567,4568",
+    "--outbound-ports-to-ignore",
+    "4567,4568" ]
+  securityContext:
+    allowPrivilegeEscalation: true
+    capabilities:
+      add:
+      - NET_ADMIN
+      - NET_RAW
+      drop:
+      - ALL
+containers:
+- name: impart-inspector
+  image: {{ .Values.inspector.image.repository }}
+  imagePullPolicy: {{ .Values.inspector.image.pullPolicy }}
+  securityContext:
+    runAsUser: 2102
+  env:
+  - name: INSPECTOR_DD_AGENT_HOST
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+  - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
+    value: ":4143"
+  - name: INSPECTOR_MODE
+    value: "sidecar_proxy"
+  - name: INSPECTOR_SIDECAR_TARGET_URL
+    value: "https://localhost:443"
+  - name: INSPECTOR_API_ACCESS_TOKEN
+    value: {{ .Values.inspector.auth.accessToken }}
+  - name: INSPECTOR_IMPART_API_URL
+    value: {{ .Values.inspector.impartApiUrl }}
+  - name: INSPECTOR_TLS_CERT
+    value: "/etc/tls-secret/tls.crt"
+  - name: INSPECTOR_TLS_KEY
+    value: "/etc/tls-secret/tls.key"
+  - name: INSPECTOR_AUTH0_TENANT_DOMAIN
+    value: {{ .Values.inspector.auth.tenantDomain }}
+  - name: INSPECTOR_JWT_AUDIENCE
+    value: {{ .Values.inspector.auth.jwtAudience }}
+  - name: INSPECTOR_API_CLIENT_ID
+    value: {{ .Values.inspector.auth.apiClientId }}
+  - name: INSPECTOR_API_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.auth.apiSecretRef }}
+        key: inspectorSecret
+  volumeMounts:
+  {{- if .Values.inspector.tlsSecretRef }}
+  - mountPath: "/etc/tls-secret"
+    name: proxy-tls-secret
+    readOnly: true
+  {{- end }}
+  {{- if .Values.inspector.additionalVolumeMounts }}
+    {{- toYaml .Values.inspector.additionalVolumeMounts | nindent 2 }}
+  {{- end }}
+volumes:
+{{- if .Values.inspector.tlsSecretRef }}
+- name: proxy-tls-secret
+  secret:
+    secretName: {{ .Values.inspector.tlsSecretRef }}
+{{- end }}
+{{- if .Values.inspector.additionalVolumes }}
+  {{- toYaml .Values.inspector.additionalVolumes | nindent 0 }}
+{{- end }}

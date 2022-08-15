@@ -1,0 +1,9 @@
+apiVersion: v2
+name: sidecar-injector
+description: Helm chart to automatically install impart proxy inspector
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"

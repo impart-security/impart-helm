@@ -1,0 +1,10 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}
+  labels:
+    {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
+rules:
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["mutatingwebhookconfigurations"]
+  verbs: ["create", "get", "delete", "list", "patch", "update", "watch"]
