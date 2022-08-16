@@ -26,5 +26,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.4.0
         with:
           charts_dir: "."
+          charts_repo_url: "https://helm.impartsecurity.net/"
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

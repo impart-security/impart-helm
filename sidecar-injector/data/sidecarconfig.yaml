@@ -36,8 +36,13 @@ containers:
     value: "sidecar_proxy"
   - name: INSPECTOR_SIDECAR_TARGET_URL
     value: "https://localhost:443"
+  {{- if .Values.inspector.auth.accessTokenSecretRef }}
   - name: INSPECTOR_API_ACCESS_TOKEN
-    value: {{ .Values.inspector.auth.accessToken }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.auth.accessTokenSecretRef }}
+        key: accessToken
+  {{- end }}
   - name: INSPECTOR_IMPART_API_URL
     value: {{ .Values.inspector.impartApiUrl }}
   - name: INSPECTOR_TLS_CERT

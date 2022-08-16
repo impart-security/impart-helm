@@ -31,7 +31,7 @@ inspector:
     jwtAudience: ""
     apiClientId: ""
     apiSecretRef: ""
-    accessToken: ""
+    accessTokenSecretRef: ""
   #specify additional volumes mounts
   additionalVolumes: []
   ## specify where the additional volumes
