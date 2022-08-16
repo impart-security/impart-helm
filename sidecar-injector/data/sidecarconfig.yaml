@@ -50,11 +50,13 @@ containers:
     value: {{ .Values.inspector.auth.jwtAudience }}
   - name: INSPECTOR_API_CLIENT_ID
     value: {{ .Values.inspector.auth.apiClientId }}
+  {{- if .Values.inspector.auth.apiSecretRef }}
   - name: INSPECTOR_API_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         name: {{ .Values.inspector.auth.apiSecretRef }}
         key: inspectorSecret
+  {{- end }}
   volumeMounts:
   {{- if .Values.inspector.tlsSecretRef }}
   - mountPath: "/etc/tls-secret"

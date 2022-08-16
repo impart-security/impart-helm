@@ -12,6 +12,7 @@ webhookinjector:
   additionalVolumes: []
   ## specify where the additional volumes are mounted in the sidecar-injector container
   additionalVolumeMounts: []
+  objectSelectorLabel: impart-inspector-injection
 
 proxyinit:
   image:
@@ -19,7 +20,7 @@ proxyinit:
     pullPolicy: Always
 
 inspector:
-  impartApiUrl: "https://api-server/v0"
+  impartApiUrl: "https://api.impartsecurity.net/v0/health"
   image:
     repository: impartsecurity/inspector:alpha
     pullPolicy: Always

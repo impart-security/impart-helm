@@ -9,7 +9,7 @@
 {{- $tlsKey = index $secret.data "tls.key" }}
 {{- $caCrt = index $secret.data "ca.crt" }}
 {{- else -}}
-{{- $ca := genCA "svc-cat-ca" 3650 }}
+{{- $ca := genCA (printf "%s-ca" .Release.Namespace) 3650 }}
 {{- $svcName := include "sidecar-injector.fullname" . }}
 {{- $cn := printf "%s.%s.svc" $svcName .Release.Namespace }}
 {{- $altName1 := printf "%s.cluster.local" $cn }}
@@ -58,7 +58,7 @@ webhooks:
     sideEffects: None
     objectSelector:
       matchLabels:
-        impart-inspector-injection: enabled
+        {{ .Values.webhookinjector.objectSelectorLabel }}: enabled
 
 ---
 
