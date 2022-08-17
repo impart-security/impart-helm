@@ -20,7 +20,7 @@ proxyinit:
     pullPolicy: Always
 
 inspector:
-  impartApiUrl: "https://api.impartsecurity.net/v0/health"
+  impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
     repository: impartsecurity/inspector:alpha
     pullPolicy: Always
