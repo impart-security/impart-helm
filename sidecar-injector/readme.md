@@ -12,7 +12,7 @@ Create ssl secret for inspector to be able to intercept traffic. Note the secret
 ```console
 $ kubectl create -n <api_pod_deployment_ns> secret generic <tls-secret> --from-file=tls.key=/path/to/tls.key --from-file=tls.crt=/path/to/tls.crt --from-file=ca.crt=/path/to/ca.crt
 ```
-Create access token in console and create secret with `accessToken` entry in the pod namespacee
+Create access token in console and create secret with `accessToken` entry in the pod namespace
 
 
 Install helm chart
@@ -26,8 +26,8 @@ to inject inspector into an api pod provide the following annotations
 spec:
   template:
     metadata:
-      impart-inspector-injection: "enabled"
-      impart-inspector-sidecar-target-url: "https://localhost:<api-port>"
+      labels:
+        impart-inspector-injection: "enabled"
 ```
 
 ## Uninstalling the Chart
