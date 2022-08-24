@@ -4,13 +4,10 @@ initContainers:
   imagePullPolicy: {{ .Values.proxyinit.image.pullPolicy }}
   args: [
     "--incoming-proxy-port",
-    "4143",
+    "{{ .Values.inspector.port }}",
     "--proxy-uid",
-    "2102",
-    "--inbound-ports-to-ignore",
-    "4190,4191,4567,4568",
-    "--outbound-ports-to-ignore",
-    "4567,4568" ]
+    "2103"
+    ]
   securityContext:
     allowPrivilegeEscalation: true
     capabilities:
@@ -24,14 +21,14 @@ containers:
   image: {{ .Values.inspector.image.repository }}
   imagePullPolicy: {{ .Values.inspector.image.pullPolicy }}
   securityContext:
-    runAsUser: 2102
+    runAsUser: 2103
   env:
   - name: INSPECTOR_STATSD_HOST
     valueFrom:
       fieldRef:
         fieldPath: status.hostIP
   - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
-    value: ":4143"
+    value: ":{{ .Values.inspector.port }}"
   - name: INSPECTOR_MODE
     value: "sidecar_proxy"
   - name: INSPECTOR_SIDECAR_CONTAINER_BACKEND_SCHEME

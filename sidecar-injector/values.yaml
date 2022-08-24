@@ -26,6 +26,7 @@ inspector:
     pullPolicy: Always
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
+  port: 14143
   auth:
     tenantDomain: ""
     jwtAudience: ""

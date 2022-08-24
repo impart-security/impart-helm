@@ -101,7 +101,6 @@ spec:
           image: "{{ .Values.webhookinjector.image.repository }}"
           imagePullPolicy: {{ .Values.webhookinjector.image.pullPolicy }}
           args:
-          - --service-name={{ include "sidecar-injector.fullname" . }}
           - --sidecar-config-file=/etc/webhook/config/sidecarconfig.yaml
           - --tls-cert-file=/etc/webhook/certs/tls.crt
           - --tls-private-key-file=/etc/webhook/certs/tls.key
@@ -110,14 +109,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                - /bin/sh
-                - -c
-                - /prestop.sh
-                - impart-sidecar-injector-webhook
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
