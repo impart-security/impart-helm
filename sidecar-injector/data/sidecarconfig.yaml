@@ -26,10 +26,10 @@ containers:
   securityContext:
     runAsUser: 2102
   env:
-  - name: INSPECTOR_DD_AGENT_HOST
+  - name: INSPECTOR_STATSD_HOST
     valueFrom:
       fieldRef:
-        fieldPath: status.podIP
+        fieldPath: status.hostIP
   - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
     value: ":4143"
   - name: INSPECTOR_MODE
