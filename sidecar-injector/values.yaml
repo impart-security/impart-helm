@@ -1,23 +1,55 @@
-# Default values for sidecar-injector.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
 
 webhookinjector:
   image:
     repository: impartsecurity/k8s-webhook-injector:alpha
     pullPolicy: Always
-    #specify additional volumes to mount in the sidecar-injector container
+    pullSecrets: []
+  # specify additional volumes to mount in the sidecar-injector container
   additionalVolumes: []
-  ## specify where the additional volumes are mounted in the sidecar-injector container
+  # specify where the additional volumes are mounted in the sidecar-injector container
   additionalVolumeMounts: []
   objectSelectorLabel: impart-inspector-injection
+  resources: {}
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  service:
+    type: ClusterIP
+    port: 443
+    targetPort: 8443
+  certificate:
+    generate: true
+    caCrt: ""
+    tlsCrt: ""
+    tlsKey: ""
 
 proxyinit:
   image:
     repository: impartsecurity/k8s-sidecar-init:alpha
     pullPolicy: Always
+  ignorePorts:
+    inbound: ""
+    outbound: ""
 
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
@@ -33,86 +65,40 @@ inspector:
     apiClientId: ""
     apiSecretRef: ""
     accessTokenSecretRef: ""
-  #specify additional volumes mounts
   additionalVolumes: []
-  ## specify where the additional volumes
   additionalVolumeMounts: []
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 443
-  targetPort: 8443
-
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
-certificate:
-  generate: true
-  caCrt: ""
-  tlsCrt: ""
-  tlsKey: ""
+controlnode:
+  name: controlnode
+  enabled: true
+  image:
+    repository: impartsecurity/control-node:alpha
+    pullPolicy: Always
+    pullSecrets: []
+  port: 7946
+  # specify additional volumes to mount in the sidecar-injector container
+  additionalVolumes: []
+  # specify where the additional volumes are mounted in the sidecar-injector container
+  additionalVolumeMounts: []
+  resources: {}
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podSecurityContext: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  service:
+    type: ClusterIP
+    port: 7946
+    targetPort: 7946
 

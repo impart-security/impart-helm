@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "sidecar-injector.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.webhookinjector.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
+    - port: {{ .Values.webhookinjector.service.port }}
+      targetPort: {{ .Values.webhookinjector.service.targetPort }}
   selector:
     {{- include "sidecar-injector.selectorLabels" . | nindent 4 }}

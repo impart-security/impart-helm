@@ -51,13 +51,33 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Controlnode labels
+*/}}
+{{- define "sidecar-injector.controlnode.labels" -}}
+helm.sh/chart: {{ include "sidecar-injector.chart" . }}
+{{ include "sidecar-injector.controlnode.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Controlnode selector labels
+*/}}
+{{- define "sidecar-injector.controlnode.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "sidecar-injector.name" . }}
+app.kubernetes.io/instance: {{ .Values.controlnode.name | quote }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "sidecar-injector.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "sidecar-injector.fullname" .) .Values.serviceAccount.name }}
+{{- if .Values.webhookinjector.serviceAccount.create }}
+{{- default (include "sidecar-injector.fullname" .) .Values.webhookinjector.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.webhookinjector.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
@@ -76,5 +96,17 @@ and we want to make sure that the component is included in the name.
 Create the name of the certificate secret to use
 */}}
 {{- define "sidecar-injector.certificateSecretName" -}}
-{{- default (include "sidecar-injector.componentname" (list . "webhook-tls")) .Values.certificate.secretName }}
+{{- default (include "sidecar-injector.componentname" (list . "webhook-tls")) .Values.webhookinjector.certificate.secretName }}
 {{- end }}
+
+{{/*
+Create a fully qualified controlnode name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "sidecar-injector.controlnode.fullname" -}}
+{{- if .Values.controlnode.fullnameOverride -}}
+{{- .Values.controlnode.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name .Values.controlnode.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}

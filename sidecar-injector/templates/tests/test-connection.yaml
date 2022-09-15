@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "sidecar-injector.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "sidecar-injector.fullname" . }}:{{ .Values.webhookinjector.service.port }}']
   restartPolicy: Never

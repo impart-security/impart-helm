@@ -1,0 +1,79 @@
+{{- if .Values.controlnode.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sidecar-injector.controlnode.fullname" . }}
+  labels:
+    {{- include "sidecar-injector.controlnode.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.controlnode.service.type }}
+  ports:
+    - port: {{ .Values.controlnode.service.port }}
+      targetPort: {{ .Values.controlnode.service.targetPort }}
+  selector:
+    {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 4 }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sidecar-injector.controlnode.fullname" . }}
+  labels:
+    {{- include "sidecar-injector.controlnode.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.controlnode.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sidecar-injector.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.controlnode.podSecurityContext | nindent 8 }}
+      containers:
+        - name:  {{ .Values.controlnode.name }}
+          securityContext:
+            {{- toYaml .Values.controlnode.securityContext | nindent 12 }}
+          image: "{{ .Values.controlnode.image.repository }}"
+          imagePullPolicy: {{ .Values.controlnode.image.pullPolicy }}
+          args:
+          - --gossip_port={{ .Values.controlnode.port }}
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          resources:
+            {{- toYaml .Values.controlnode.resources | nindent 12 }}
+          volumeMounts:
+          {{- if .Values.controlnode.additionalVolumeMounts }}
+            {{- toYaml .Values.controlnode.additionalVolumeMounts | nindent 10 }}
+            {{ else }} []
+          {{- end }}
+      {{- with .Values.controlnode.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controlnode.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controlnode.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sidecar-injector.serviceAccountName" . }}
+      volumes:
+      {{- if .Values.controlnode.additionalVolumes }}
+        {{- toYaml .Values.controlnode.additionalVolumes | nindent 6 }}
+        {{ else }} []
+      {{- end }}
+{{- end }}

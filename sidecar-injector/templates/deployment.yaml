@@ -1,7 +1,11 @@
-{{- $caCrt := .Values.certificate.caCrt }}
-{{- $tlsCrt := .Values.certificate.tlsCrt }}
-{{- $tlsKey := .Values.certificate.tlsKey }}
-{{- if .Values.certificate.generate }}
+{{- $caCrt := .Values.webhookinjector.certificate.caCrt }}
+{{- $tlsCrt := .Values.webhookinjector.certificate.tlsCrt }}
+{{- $tlsKey := .Values.webhookinjector.certificate.tlsKey }}
+{{- $controlnodeVersion := .Values.controlnode.version }}
+{{- $inspectorVersion := .Values.inspector.version }}
+{{- $proxyVersion := .Values.proxyinit.version }}
+{{- $webhookVersion := .Values.webhookinjector.version }}
+{{- if .Values.webhookinjector.certificate.generate }}
 {{- if or (not $caCrt) (not $tlsCrt) (not $tlsKey) }}
 {{- $secret := (lookup "v1" "Secret" .Release.Namespace (printf "%s" (include "sidecar-injector.certificateSecretName" $)) ) }}
 {{- if $secret }}
@@ -69,8 +73,8 @@ metadata:
   labels:
     {{- include "sidecar-injector.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.webhookinjector.autoscaling.enabled }}
+  replicas: {{ .Values.webhookinjector.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -84,20 +88,24 @@ spec:
         tls.crt: {{ $tlsCrt }}
         tls.key: {{ $tlsKey }}
         ca.crt:  {{ $caCrt }}
+        gossip-version: {{ $controlnodeVersion }}
+        inspector-version: {{ $inspectorVersion }}
+        proxy-version: {{ $proxyVersion }}
+        webhook-version: {{ $webhookVersion }}
       labels:
         {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.webhookinjector.image.pullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "sidecar-injector.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.webhookinjector.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.webhookinjector.securityContext | nindent 12 }}
           image: "{{ .Values.webhookinjector.image.repository }}"
           imagePullPolicy: {{ .Values.webhookinjector.image.pullPolicy }}
           args:
@@ -110,7 +118,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.webhookinjector.resources | nindent 12 }}
           volumeMounts:
           - mountPath: /etc/webhook/config
             name: webhook-config
@@ -120,15 +128,15 @@ spec:
           {{- if .Values.webhookinjector.additionalVolumeMounts }}
             {{- toYaml .Values.webhookinjector.additionalVolumeMounts | nindent 10 }}
           {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.webhookinjector.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.webhookinjector.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.webhookinjector.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

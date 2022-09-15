@@ -6,7 +6,19 @@ initContainers:
     "--incoming-proxy-port",
     "{{ .Values.inspector.port }}",
     "--proxy-uid",
-    "2103"
+    "2103",
+    "--inbound-ports-to-ignore",
+    {{- if .Values.controlnode.enabled }}
+    "{{ (printf "%s,%v" .Values.proxyinit.ignorePorts.inbound .Values.controlnode.service.port) | trimPrefix "," }}",
+    {{- else }}
+    "{{ .Values.proxyinit.ignorePorts.inbound }}",
+    {{- end }}
+    "--outbound-ports-to-ignore",
+    {{- if .Values.controlnode.enabled }}
+    "{{ (printf "%s,%v" .Values.proxyinit.ignorePorts.outbound .Values.controlnode.service.port) | trimPrefix "," }}",
+    {{- else }}
+    "{{ .Values.proxyinit.ignorePorts.outbound }}",
+    {{- end }}
     ]
   securityContext:
     allowPrivilegeEscalation: true
@@ -40,6 +52,12 @@ containers:
         name: {{ .Values.inspector.auth.accessTokenSecretRef }}
         key: accessToken
   {{- end }}
+  {{- if .Values.controlnode.enabled }}
+  - name: INSPECTOR_GOSSIP_PEER_ADDR
+  {{- $gossipSvcName := include "sidecar-injector.controlnode.fullname" . -}}
+  {{- $gossipEndpoint := printf "%s.%s.svc.cluster.local" $gossipSvcName .Release.Namespace }}
+    value: {{ $gossipEndpoint }}:{{ .Values.controlnode.port }}
+  {{- end }}
   - name: INSPECTOR_IMPART_API_URL
     value: {{ .Values.inspector.impartApiUrl }}
   - name: INSPECTOR_TLS_CERT
@@ -59,6 +77,8 @@ containers:
         name: {{ .Values.inspector.auth.apiSecretRef }}
         key: inspectorSecret
   {{- end }}
+  resources:
+    {{- toYaml .Values.inspector.resources | nindent 4 }}
   volumeMounts:
   {{- if .Values.inspector.tlsSecretRef }}
   - mountPath: "/etc/tls-secret"
