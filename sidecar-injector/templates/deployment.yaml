@@ -88,10 +88,18 @@ spec:
         tls.crt: {{ $tlsCrt }}
         tls.key: {{ $tlsKey }}
         ca.crt:  {{ $caCrt }}
-        gossip-version: {{ $controlnodeVersion }}
+        {{- if $controlnodeVersion }}
+        control-version: {{ $controlnodeVersion }}
+        {{- end }}
+        {{- if $inspectorVersion }}
         inspector-version: {{ $inspectorVersion }}
+        {{- end }}
+        {{- if $proxyVersion }}
         proxy-version: {{ $proxyVersion }}
+        {{- end }}
+        {{- if $webhookVersion }}
         webhook-version: {{ $webhookVersion }}
+        {{- end }}
       labels:
         {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
     spec:
