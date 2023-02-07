@@ -85,9 +85,12 @@ spec:
         {{- if $caCrt }}
         checksum/webhook-tls-config: {{ $caCrt | sha256sum }}
         {{- end }}
-        tls.crt: {{ $tlsCrt }}
-        tls.key: {{ $tlsKey }}
-        ca.crt:  {{ $caCrt }}
+        {{- if $tlsCrt }}
+        checksum/webhook-tls-config-c: {{ $tlsCrt | sha256sum }}
+        {{- end }}
+        {{- if $tlsKey }}
+        checksum/webhook-tls-config-k: {{ $tlsKey | sha256sum }}
+        {{- end }}
         {{- if $controlnodeVersion }}
         control-version: {{ $controlnodeVersion }}
         {{- end }}

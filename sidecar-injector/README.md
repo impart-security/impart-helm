@@ -77,3 +77,44 @@ controller:
     secret:
       secretName: <tls secret from impart chart installation>
 ```
+
+
+## Installing as emissary-ingress sidecar proxy
+Impart sidecar-injector helm overrides to exclude emissary health port
+```yaml
+proxyinit:
+  ignorePorts:
+    inbound: "8877"
+    outbound: "8877"
+```
+
+Create impart access token secret in the emissary installation namespace
+```
+kubectl create -n emissary secret generic impart-secrets --from-file=accessToken=accessToken.secret
+```
+
+Install emissary-ingress 
+```
+helm upgrade -n emissary --create-namespace \
+     emissary-ingress datawire/emissary-ingress --values emissary-values.yaml
+```
+
+with the overrides file:
+```yaml
+podAnnotations:
+  #uncomment for non-tls traffic
+  #impart-inspector-sidecar-container-backend-scheme: http
+  #impart-inspector-sidecar-http-listener-disable-tls: "true"
+
+#enable impart proxy injection
+podLabels:
+  impart-inspector-injection: enabled
+
+#to allow init container modify iptable rules
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    add:
+    - NET_ADMIN
+    - NET_RAW
+```

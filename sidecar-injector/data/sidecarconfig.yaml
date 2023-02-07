@@ -58,6 +58,8 @@ containers:
   {{- $gossipEndpoint := printf "%s.%s.svc.cluster.local" $gossipSvcName .Release.Namespace }}
     value: {{ $gossipEndpoint }}:{{ .Values.controlnode.port }}
   {{- end }}
+  - name: INSPECTOR_SIGTERM_DELAY_SECONDS
+    value: {{ .Values.inspector.sigtermDelaySeconds }}
   - name: INSPECTOR_IMPART_API_URL
     value: {{ .Values.inspector.impartApiUrl }}
   - name: INSPECTOR_TLS_CERT
@@ -77,12 +79,21 @@ containers:
         name: {{ .Values.inspector.auth.apiSecretRef }}
         key: inspectorSecret
   {{- end }}
+  {{- if .Values.inspector.auth.accessTokenFileSecretRef }}
+  - name: INSPECTOR_API_ACCESS_TOKEN_FILE_PATH
+    value: "/etc/api-token-secret/accessToken"
+  {{- end }}
   resources:
     {{- toYaml .Values.inspector.resources | nindent 4 }}
   volumeMounts:
   {{- if .Values.inspector.tlsSecretRef }}
   - mountPath: "/etc/tls-secret"
     name: proxy-tls-secret
+    readOnly: true
+  {{- end }}
+  {{- if .Values.inspector.auth.accessTokenFileSecretRef }}
+  - mountPath: "/etc/api-token-secret"
+    name: api-token-secret-file
     readOnly: true
   {{- end }}
   {{- if .Values.inspector.additionalVolumeMounts }}
@@ -93,6 +104,11 @@ volumes:
 - name: proxy-tls-secret
   secret:
     secretName: {{ .Values.inspector.tlsSecretRef }}
+{{- end }}
+{{- if .Values.inspector.auth.accessTokenFileSecretRef }}
+- name: api-token-secret-file
+  secret:
+    secretName: {{ .Values.inspector.auth.accessTokenFileSecretRef }}
 {{- end }}
 {{- if .Values.inspector.additionalVolumes }}
   {{- toYaml .Values.inspector.additionalVolumes | nindent 0 }}

@@ -1,7 +1,6 @@
-
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:alpha
+    repository: impartsecurity/k8s-webhook-injector:0.2.0
     pullPolicy: Always
     pullSecrets: []
   # specify additional volumes to mount in the sidecar-injector container
@@ -21,9 +20,11 @@ webhookinjector:
     create: true
     annotations: {}
     name: ""
-  podSecurityContext: {}
+  podSecurityContext:
+    {}
     # fsGroup: 2000
-  securityContext: {}
+  securityContext:
+    {}
     # capabilities:
     #   drop:
     #   - ALL
@@ -45,7 +46,7 @@ webhookinjector:
 
 proxyinit:
   image:
-    repository: impartsecurity/k8s-sidecar-init:alpha
+    repository: impartsecurity/k8s-sidecar-init:0.2.0
     pullPolicy: Always
   ignorePorts:
     inbound: ""
@@ -54,17 +55,19 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:alpha
+    repository: impartsecurity/inspector:0.2.0
     pullPolicy: Always
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
   port: 14143
+  sigtermDelaySeconds: 20
   auth:
     tenantDomain: ""
     jwtAudience: ""
     apiClientId: ""
     apiSecretRef: ""
     accessTokenSecretRef: ""
+    accessTokenFileSecretRef: "" #access token secret mounted as file
   additionalVolumes: []
   additionalVolumeMounts: []
   resources:
@@ -79,7 +82,7 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:alpha
+    repository: impartsecurity/control-node:0.2.0
     pullPolicy: Always
     pullSecrets: []
   port: 7946
@@ -101,4 +104,3 @@ controlnode:
     type: ClusterIP
     port: 7946
     targetPort: 7946
-
