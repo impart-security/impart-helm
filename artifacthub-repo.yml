@@ -8,4 +8,4 @@ owners:
     email: marc@impart.security
 ignore:
   - name: sidecar-injector
-    version: "0.2.0"
+    version: "0.1.0|0.2.0"

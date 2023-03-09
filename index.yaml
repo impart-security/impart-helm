@@ -4,7 +4,7 @@ entries:
   - apiVersion: v2
     appVersion: 0.3.0
     created: "2023-03-09T18:38:00.263959022Z"
-    description: Helm  chart to automatically install impart proxy inspector 
+    description: Helm chart to automatically install impart proxy inspector
     digest: bf968de0d0b3d66f19815dfc843a791f58fd10b0a46ce7afd268e216caa68272
     home: https://www.impart.security/
     keywords:
