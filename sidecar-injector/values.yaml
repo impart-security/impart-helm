@@ -1,7 +1,7 @@
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.2.0
-    pullPolicy: Always
+    repository: impartsecurity/k8s-webhook-injector:0.3.0
+    pullPolicy: IfNotPresent
     pullSecrets: []
   # specify additional volumes to mount in the sidecar-injector container
   additionalVolumes: []
@@ -45,9 +45,10 @@ webhookinjector:
     tlsKey: ""
 
 proxyinit:
+  enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.2.0
-    pullPolicy: Always
+    repository: impartsecurity/k8s-sidecar-init:0.3.0
+    pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
     outbound: ""
@@ -55,11 +56,13 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.2.0
-    pullPolicy: Always
+    repository: impartsecurity/inspector:0.3.0
+    pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
+  mode: "sidecar_proxy"
   port: 14143
+  tcp_listen_addr: ":20210"
   sigtermDelaySeconds: 20
   auth:
     tenantDomain: ""
@@ -72,18 +75,18 @@ inspector:
   additionalVolumeMounts: []
   resources:
     limits:
-      cpu: 1
+      cpu: 2
       memory: 2Gi
     requests:
-      cpu: 200m
+      cpu: 300m
       memory: 256Mi
 
 controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.2.0
-    pullPolicy: Always
+    repository: impartsecurity/control-node:0.3.0
+    pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946
   # specify additional volumes to mount in the sidecar-injector container

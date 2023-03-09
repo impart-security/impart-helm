@@ -1,3 +1,4 @@
+{{- if .Values.proxyinit.enabled }}
 initContainers:
 - name: proxy-init
   image: {{ .Values.proxyinit.image.repository }}
@@ -28,6 +29,7 @@ initContainers:
       - NET_RAW
       drop:
       - ALL
+{{- end }}
 containers:
 - name: impart-inspector
   image: {{ .Values.inspector.image.repository }}
@@ -41,8 +43,10 @@ containers:
         fieldPath: status.hostIP
   - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
     value: ":{{ .Values.inspector.port }}"
+  - name: INSPECTOR_TCP_LISTEN_ADDR
+    value: "{{ .Values.inspector.tcp_listen_addr }}"
   - name: INSPECTOR_MODE
-    value: "sidecar_proxy"
+    value: "{{ .Values.inspector.mode }}"
   - name: INSPECTOR_SIDECAR_CONTAINER_BACKEND_SCHEME
     value: ""
   {{- if .Values.inspector.auth.accessTokenSecretRef }}
