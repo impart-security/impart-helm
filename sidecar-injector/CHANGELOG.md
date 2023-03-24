@@ -1,6 +1,25 @@
 
 # Changelog
 
+## [0.4.0] - 2023-03-24
+
+### Added 
+
+- `controlnode.logLevel` to change the controlnode log level (default="2") [0 = DEBUG, 1=INFO, 2=NOTICE, 3=WARN, 4=ERROR]
+- `controlnode.logFormat` to change the controlnode log format (default="text-basic") ["text-basic", "json"]
+- `inspector.logLevel` to change the inspector log level (default="2") [0 = DEBUG, 1=INFO, 2=NOTICE, 3=WARN, 4=ERROR]
+- `inspector.logFormat` to change the inspector log format (default="text-basic") ["text-basic", "json"]
+- `webhookinjector.logLevel` to change the webhook injector log level (default="2") [0 = DEBUG, 1=INFO, 2=NOTICE, 3=WARN, 4=ERROR]
+- `webhookinjector.logFormat` to change the webhook injector log format (default="text-basic") ["text-basic", "json"]
+
+### Changed
+
+- Bumped container versions
+  - `0.4.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.4.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.4.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.4.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
 ## [0.3.0] - 2023-03-09
 
 ### Added 

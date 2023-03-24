@@ -62,6 +62,10 @@ containers:
   {{- $gossipEndpoint := printf "%s.%s.svc.cluster.local" $gossipSvcName .Release.Namespace }}
     value: {{ $gossipEndpoint }}:{{ .Values.controlnode.port }}
   {{- end }}
+  - name: INSPECTOR_LOG_LEVEL
+    value: {{ .Values.inspector.logLevel }}
+  - name: INSPECTOR_LOG_FORMAT
+    value: {{ .Values.inspector.logFormat }}
   - name: INSPECTOR_SIGTERM_DELAY_SECONDS
     value: {{ .Values.inspector.sigtermDelaySeconds }}
   - name: INSPECTOR_IMPART_API_URL
