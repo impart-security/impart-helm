@@ -1,3 +1,4 @@
+
 # impart
 
 Helm chart to automatically install impart proxy inspector
@@ -49,7 +50,7 @@ $ helm delete impart
 | <nobr>impart-inspector-sidecar-http-listener-disable-tls<nobr> | Listens and serves http. "true" or "false" string values                                                                         |
 | <nobr>impart-inspector-sidecar-container-backend-scheme<nobr>  | Overrides http or https backend scheme. Typical scenario when inspector termanates ssl and pushes traffic into http backed port. |
 | <nobr>impart-inspector-sidecar-tls-secret<nobr>                | Sets kubernetes ssl secret.                                                                                                      |
-| <nobr>impart-inspector-plugin-mode<nobr>                       | Installs inspector without intercepting the traffic. Requires a plugin to interact with the inspector.                           |
+| <nobr>impart-inspector-plugin-mode<nobr>                       | Installs inspector without intercepting the traffic. Requires a plugin to interact with the inspector. Values "tcp" - sets insepctor mode to tcp_server, "socket" - sets inspector mode to unix_socket_server, "socket+volume" - sets inspector mode to unix_socket_server and creates and mounts socket volume.                        |
 
 ## Installing as nginx ingress sidecar proxy
 
