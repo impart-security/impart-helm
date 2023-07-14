@@ -43,6 +43,10 @@ containers:
         fieldPath: status.hostIP
   - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
     value: ":{{ .Values.inspector.port }}"
+  {{- if .Values.inspector.destinationAddr }}
+  - name: INSPECTOR_SIDECAR_DESTINATION_ADDR
+    value: "{{ .Values.inspector.destinationAddr }}"
+  {{- end }}
   - name: INSPECTOR_TCP_LISTEN_ADDR
     value: "{{ .Values.inspector.tcp_listen_addr }}"
   - name: INSPECTOR_MODE
