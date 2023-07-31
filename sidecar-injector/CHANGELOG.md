@@ -1,6 +1,14 @@
 
 # Changelog
 
+## [0.10.0] - 2023-07-31
+
+### Changed
+
+- Default inspector helm resource cpu (requests: 200m limit: 1.2)
+- Bumped container versions
+  - `0.10.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.9.0] - 2023-07-24
 
 ### Added
@@ -10,7 +18,6 @@
 
 ### Changed
 
-- Default inspector helm resource cpu (requests: 200m limit: 1.2)
 - Bumped container versions
   - `0.9.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
 
