@@ -4,8 +4,8 @@ description: Helm chart to automatically install impart proxy inspector
 
 type: application
 
-version: 0.16.0
-appVersion: "0.16.0"
+version: 0.16.1
+appVersion: "0.16.1"
 
 keywords:
   - security
