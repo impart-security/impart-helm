@@ -1,6 +1,13 @@
 
 # Changelog
 
+## [0.16.3] - 2024-03-04
+
+### Changed
+
+- Bumped container versions
+  - `0.16.3` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.16.2] - 2024-02-27
 
 ### Changed
@@ -230,4 +237,3 @@
   - `alpha` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
   - `alpha` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
   - `alpha` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
-
