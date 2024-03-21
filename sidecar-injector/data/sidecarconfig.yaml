@@ -7,7 +7,7 @@ initContainers:
     "--incoming-proxy-port",
     "{{ .Values.inspector.port }}",
     "--proxy-uid",
-    "2103",
+    "{{ .Values.inspector.securityContext.runAsUser }}",
     "--inbound-ports-to-ignore",
     {{- if .Values.controlnode.enabled }}
     "{{ (printf "%s,%v" .Values.proxyinit.ignorePorts.inbound .Values.controlnode.service.port) | trimPrefix "," }}",
@@ -22,20 +22,14 @@ initContainers:
     {{- end }}
     ]
   securityContext:
-    allowPrivilegeEscalation: true
-    capabilities:
-      add:
-      - NET_ADMIN
-      - NET_RAW
-      drop:
-      - ALL
+    {{- toYaml .Values.proxyinit.securityContext | nindent 12 }}
 {{- end }}
 containers:
 - name: impart-inspector
   image: {{ .Values.inspector.image.repository }}
   imagePullPolicy: {{ .Values.inspector.image.pullPolicy }}
   securityContext:
-    runAsUser: 2103
+    {{- toYaml .Values.inspector.securityContext | nindent 12 }}
   env:
   - name: INSPECTOR_STATSD_HOST
     valueFrom:

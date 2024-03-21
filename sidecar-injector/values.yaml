@@ -54,6 +54,15 @@ proxyinit:
   ignorePorts:
     inbound: ""
     outbound: ""
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsUser: 0
+    capabilities:
+      add:
+      - NET_ADMIN
+      - NET_RAW
+      drop:
+      - ALL
 
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
@@ -72,6 +81,8 @@ inspector:
   unixSocketPath: "/tmp/impart/inspector.sock"
   unixSocketPermissions: 0666
   clusterGroup: ""
+  securityContext:
+    runAsUser: 2103
 
   auth:
     tenantDomain: ""

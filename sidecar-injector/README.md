@@ -24,7 +24,7 @@ Install helm chart
 ```console
 $ helm repo add impart https://helm.impartsecurity.net
 $ helm repo update
-$ helm install --namespace impart impart impart/sidecar-injector --set inspector.tlsSecret=<tls-secret> --set inspector.auth.accessToken=<accessToken>
+$ helm install --namespace impart impart impart/sidecar-injector --set inspector.tlsSecret=<tls-secret> --set inspector.auth.accessTokenSecretRef=<accessTokenSecretName>
 ```
 
 to inject inspector into an api pod provide the following annotations
@@ -106,7 +106,7 @@ kubectl create -n emissary secret generic impart-secrets --from-file=accessToken
 Install emissary-ingress
 
 ```
-helm upgrade -n emissary --create-namespace \
+helm install -n emissary \
      emissary-ingress datawire/emissary-ingress --values emissary-values.yaml
 ```
 
@@ -122,11 +122,5 @@ podAnnotations:
 podLabels:
   impart-inspector-injection: enabled
 
-#to allow init container modify iptable rules
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    add:
-      - NET_ADMIN
-      - NET_RAW
+replicaCount: 1
 ```

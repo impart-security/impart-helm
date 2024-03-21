@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [0.16.5] - 2024-03-21
+
+### Changed
+
+- Exposed inspector security context to be set via values
+
 ## [0.16.4] - 2024-03-12
 
 ### Changed
@@ -244,3 +250,4 @@
   - `alpha` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
   - `alpha` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
   - `alpha` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
