@@ -103,6 +103,8 @@ spec:
         {{- if $webhookVersion }}
         webhook-version: {{ $webhookVersion }}
         {{- end }}
+        checksum/values: {{ toJson .Values | sha256sum }}
+        checksum/webhook-sidecar-config: {{ (.Files.Get (printf "%s/../data/sidecarconfig.yaml" $.Template.BasePath) | sha256sum) }}
       labels:
         {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
     spec:

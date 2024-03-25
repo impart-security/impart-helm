@@ -20,6 +20,19 @@ initContainers:
     {{- else }}
     "{{ .Values.proxyinit.ignorePorts.outbound }}",
     {{- end }}
+    {{- if and (hasKey .Values.proxyinit "proxyIntercept") (.Values.proxyinit.proxyIntercept.enabled) }}
+    "--mode",
+    "proxy-intercept",
+    "--ingress-listen-ports",
+    "{{ .Values.proxyinit.proxyIntercept.ingressListenPorts }}",
+    "--inspector-port",
+    "{{ .Values.inspector.port }}",
+    "--proxy-intercept-uid",
+    "{{ .Values.proxyinit.proxyIntercept.userUid }}"
+    {{- else }}
+    "--mode",
+    "proxy"
+    {{- end }}
     ]
   securityContext:
     {{- toYaml .Values.proxyinit.securityContext | nindent 12 }}

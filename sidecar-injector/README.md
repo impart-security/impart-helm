@@ -97,6 +97,16 @@ proxyinit:
     outbound: "8877"
 ```
 
+If emissary is used with linkerd and linkerd proxy is injected into emissary gateway pod set `proxyIntercept` values.
+Adjust `ingressListenPorts` according to emissary crd Listener resources.
+
+```yaml
+proxyinit:
+  proxyIntercept:
+    enabled: true
+    ingressListenPorts: "8080,8443"
+    userUid: 2102 #uid of service mesh proxy (linkerd default 2102)
+
 Create impart access token secret in the emissary installation namespace
 
 ```
@@ -121,6 +131,4 @@ podAnnotations:
 #enable impart proxy injection
 podLabels:
   impart-inspector-injection: enabled
-
-replicaCount: 1
 ```

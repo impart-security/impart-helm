@@ -1,5 +1,10 @@
-
 # Changelog
+
+## [0.16.6] - 2024-03-25
+
+### Added
+
+- Ability to intercept local service mesh proxy
 
 ## [0.16.5] - 2024-03-21
 
@@ -250,4 +255,3 @@
   - `alpha` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
   - `alpha` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
   - `alpha` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
-
