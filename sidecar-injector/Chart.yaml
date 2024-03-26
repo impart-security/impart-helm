@@ -1,6 +1,7 @@
 apiVersion: v2
 name: sidecar-injector
-description: Helm chart to automatically install impart proxy inspector
+description: Helm chart to automatically install impart inspector sidecar
+icon: https://console.impartsecurity.net/logomark-blue-white.png
 
 type: application
 

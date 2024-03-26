@@ -35,10 +35,9 @@ data:
   tls.crt: {{ $tlsCrt }}
   tls.key: {{ $tlsKey }}
   ca.crt:  {{ $caCrt }}
----
 {{- end -}}
 
-
+---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -65,7 +64,6 @@ webhooks:
         {{ .Values.webhookinjector.objectSelectorLabel }}: enabled
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
