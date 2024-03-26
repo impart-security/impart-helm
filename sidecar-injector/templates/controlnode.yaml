@@ -74,7 +74,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "sidecar-injector.serviceAccountName" . }}
       volumes:
       {{- if .Values.controlnode.additionalVolumes }}
         {{- toYaml .Values.controlnode.additionalVolumes | nindent 6 }}

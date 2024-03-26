@@ -1,4 +1,11 @@
+
 # Changelog
+
+## [0.16.7] - 2024-03-26
+
+### Fixed
+
+- Removed duplicate serviceAccountName in pods
 
 ## [0.16.6] - 2024-03-25
 
