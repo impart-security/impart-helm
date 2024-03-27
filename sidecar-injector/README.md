@@ -106,9 +106,9 @@ proxyinit:
     enabled: true
     ingressListenPorts: "8080,8443"
     userUid: 2102 #uid of service mesh proxy (linkerd default 2102)
+```
 
 Create impart access token secret in the emissary installation namespace
-
 ```
 kubectl create -n emissary secret generic impart-secrets --from-file=accessToken=accessToken.secret
 ```
