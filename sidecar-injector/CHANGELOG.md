@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [0.16.8] - 2024-03-26
+
+### Fixed
+
+- Fix helm chart separator
+
 ## [0.16.7] - 2024-03-26
 
 ### Fixed
@@ -262,3 +268,4 @@
   - `alpha` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
   - `alpha` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
   - `alpha` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
