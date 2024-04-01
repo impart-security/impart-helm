@@ -2,6 +2,26 @@ apiVersion: v1
 entries:
   sidecar-injector:
   - apiVersion: v2
+    appVersion: 0.17.1
+    created: "2024-04-01T22:25:45.714641393Z"
+    description: Helm chart to automatically install impart inspector sidecar
+    digest: 0ca6d91e13b82f9af6af1b2867742973fab83a4dbcbbb09a7d439f311ca9b56a
+    home: https://www.impart.security/
+    icon: https://console.impartsecurity.net/logomark-blue-white.png
+    keywords:
+    - security
+    - monitoring
+    - alerting
+    - discovery
+    maintainers:
+    - email: info@impart.security
+      name: Impart Security
+    name: sidecar-injector
+    type: application
+    urls:
+    - https://github.com/impart-security/impart-helm/releases/download/sidecar-injector-0.17.1/sidecar-injector-0.17.1.tgz
+    version: 0.17.1
+  - apiVersion: v2
     appVersion: 0.17.0
     created: "2024-03-27T22:00:46.161308915Z"
     description: Helm chart to automatically install impart inspector sidecar
@@ -507,4 +527,4 @@ entries:
     urls:
     - https://github.com/impart-security/impart-helm/releases/download/sidecar-injector-0.1.0/sidecar-injector-0.1.0.tgz
     version: 0.1.0
-generated: "2024-03-27T22:00:46.161493479Z"
+generated: "2024-04-01T22:25:45.714831319Z"
