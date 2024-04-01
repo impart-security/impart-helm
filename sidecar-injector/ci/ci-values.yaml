@@ -1,0 +1,15 @@
+webhookinjector:
+  image:
+    repository: impartsecurity/k8s-webhook-injector:latest
+
+proxyinit:
+  image:
+    repository: impartsecurity/k8s-sidecar-init:latest
+
+inspector:
+  image:
+    repository: impartsecurity/inspector:latest
+
+controlnode:
+  image:
+    repository: impartsecurity/control-node:latest

@@ -56,23 +56,23 @@ proxyinit:
     outbound: ""
   # advanced scenario when inspector is depoyed into gateway pod alongside with a service mesh proxy (like linkerd)
   proxyIntercept:
-    enabled: false  # enable proxy intercept
+    enabled: false # enable proxy intercept
     ingressListenPorts: ""
-    userUid: ""  # uid of service mesh proxy (linkerd default 2102)
+    userUid: "" # uid of service mesh proxy (linkerd default 2102)
   securityContext:
     allowPrivilegeEscalation: false
     runAsUser: 0
     capabilities:
       add:
-      - NET_ADMIN
-      - NET_RAW
+        - NET_ADMIN
+        - NET_RAW
       drop:
-      - ALL
+        - ALL
 
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.17.0
+    repository: impartsecurity/inspector:0.17.1
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -95,7 +95,7 @@ inspector:
     apiClientId: ""
     apiSecretRef: ""
     accessTokenSecretRef: ""
-    accessTokenFileSecretRef: ""  # access token secret mounted as file
+    accessTokenFileSecretRef: "" # access token secret mounted as file
   additionalVolumes: []
   additionalVolumeMounts: []
   resources:
