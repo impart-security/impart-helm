@@ -1,6 +1,6 @@
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.19.0
+    repository: impartsecurity/k8s-webhook-injector:0.20.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   logLevel: "2"
@@ -12,6 +12,7 @@ webhookinjector:
   objectSelectorLabel: impart-inspector-injection
   resources: {}
   replicaCount: 1
+  priorityClassName: ""
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -49,7 +50,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.19.0
+    repository: impartsecurity/k8s-sidecar-init:0.20.0
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -72,7 +73,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.19.0
+    repository: impartsecurity/inspector:0.20.0
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -110,7 +111,7 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.19.0
+    repository: impartsecurity/control-node:0.20.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946

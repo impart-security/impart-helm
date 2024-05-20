@@ -75,6 +75,7 @@ spec:
   {{- if not .Values.webhookinjector.autoscaling.enabled }}
   replicas: {{ .Values.webhookinjector.replicaCount }}
   {{- end }}
+  priorityClassName: {{ .Values.webhookinjector.priorityClassName }}
   selector:
     matchLabels:
       {{- include "sidecar-injector.selectorLabels" . | nindent 6 }}
