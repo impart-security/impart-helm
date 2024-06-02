@@ -79,6 +79,8 @@ containers:
     value: {{ .Values.inspector.logFormat }}
   - name: INSPECTOR_GOSSIP_ENABLED
     value: {{ .Values.inspector.gossipEnabled }}
+  - name: INSPECTOR_RULE_WORKERS_POOL
+    value: {{ .Values.inspector.ruleWorkersPool }}
   - name: INSPECTOR_SIGTERM_DELAY_SECONDS
     value: {{ .Values.inspector.sigtermDelaySeconds }}
   - name: INSPECTOR_IMPART_API_URL
