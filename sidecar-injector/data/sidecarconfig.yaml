@@ -44,10 +44,14 @@ containers:
   securityContext:
     {{- toYaml .Values.inspector.securityContext | nindent 12 }}
   env:
-  - name: INSPECTOR_STATSD_HOST
+  - name: INSPECTOR_STATSD_ADDR
+  {{- if .Values.inspector.statsdAddr }}
+    value: "{{ .Values.inspector.statsdAddr }}"
+  {{- else }}
     valueFrom:
       fieldRef:
         fieldPath: status.hostIP
+  {{- end }}
   - name: INSPECTOR_SIDECAR_HTTP_LISTEN_ADDR
     value: ":{{ .Values.inspector.port }}"
   {{- if .Values.inspector.destinationAddr }}
