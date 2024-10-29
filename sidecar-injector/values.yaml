@@ -1,10 +1,10 @@
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.29.0
+    repository: impartsecurity/k8s-webhook-injector:0.30.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   logLevel: "2"
-  logFormat: "text-basic"
+  logFormat: "json"
   # specify additional volumes to mount in the sidecar-injector container
   additionalVolumes: []
   # specify where the additional volumes are mounted in the sidecar-injector container
@@ -50,7 +50,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.29.0
+    repository: impartsecurity/k8s-sidecar-init:0.30.0
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -74,7 +74,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.29.0
+    repository: impartsecurity/inspector:0.30.0
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -84,7 +84,7 @@ inspector:
   tcp_listen_addr: ":20210"
   sigtermDelaySeconds: 20
   logLevel: "2"
-  logFormat: "text-basic"
+  logFormat: "json"
   gossipEnabled: "true"
   ruleWorkersPool: "40"
   unixSocketPath: "/var/run/impart/inspector.sock"
@@ -115,12 +115,12 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.29.0
+    repository: impartsecurity/control-node:0.30.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946
   logLevel: "2"
-  logFormat: "text-basic"
+  logFormat: "json"
   # specify additional volumes to mount in the sidecar-injector container
   additionalVolumes: []
   # specify where the additional volumes are mounted in the sidecar-injector container
