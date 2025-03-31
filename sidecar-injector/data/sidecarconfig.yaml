@@ -105,6 +105,10 @@ containers:
     value: {{ .Values.inspector.unixSocketPermissions }}
   - name: INSPECTOR_CLUSTER_GROUP
     value: {{ .Values.inspector.clusterGroup }}
+  {{- if .Values.inspector.grpcExtprocMaxBodySize }}
+  - name: INSPECTOR_GRPC_EXTPROC_MAX_BODY_SIZE
+    value: "{{ .Values.inspector.grpcExtprocMaxBodySize }}"
+  {{- end }}    
   {{- if .Values.inspector.auth.apiSecretRef }}
   - name: INSPECTOR_API_CLIENT_SECRET
     valueFrom:
