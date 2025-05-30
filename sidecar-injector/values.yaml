@@ -1,3 +1,4 @@
+---
 webhookinjector:
   image:
     repository: impartsecurity/k8s-webhook-injector:0.36.0

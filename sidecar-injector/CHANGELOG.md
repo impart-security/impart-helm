@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [0.36.3] - 2025-05-30
+
+### Changed
+
+- Updated HorizontalPodAutoscaler to api version `autoscaling/v2`
+
 ## [0.36.2] - 2025-05-28
 
 ### Changed
