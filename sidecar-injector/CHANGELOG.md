@@ -1,6 +1,14 @@
 
 # Changelog
 
+## [0.37.1] - 2025-06-09
+
+### Changed
+
+- Shortened `cert-rotator` to `cr`.
+- Bumped container versions
+  - `0.37.1` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.37.0] - 2025-06-09
 
 ### Added

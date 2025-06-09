@@ -4,14 +4,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
   namespace: {{ .Release.Namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
   namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [""]
@@ -27,22 +27,22 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
   namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
 subjects:
   - kind: ServiceAccount
-    name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+    name: {{ include "sidecar-injector.fullname" . }}-cr
     namespace: {{ .Release.Namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
 rules:
   - apiGroups: ["admissionregistration.k8s.io"]
     resources: ["mutatingwebhookconfigurations"]
@@ -53,21 +53,21 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
 subjects:
   - kind: ServiceAccount
-    name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+    name: {{ include "sidecar-injector.fullname" . }}-cr
     namespace: {{ .Release.Namespace }}
 
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  name: {{ include "sidecar-injector.fullname" . }}-cr
   namespace: {{ .Release.Namespace }}
 spec:
   schedule: "0 0 * * *" # Daily at midnight
@@ -76,9 +76,9 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+          serviceAccountName: {{ include "sidecar-injector.fullname" . }}-cr
           containers:
-            - name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+            - name: {{ include "sidecar-injector.fullname" . }}-cr
               securityContext:
                 {{- toYaml .Values.webhookinjector.securityContext | nindent 16 }}
               image: "{{ .Values.webhookinjector.image.repository }}"
