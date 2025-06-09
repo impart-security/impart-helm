@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: sidecar-injector
 description: Helm chart to automatically install impart inspector sidecar
@@ -5,8 +6,8 @@ icon: https://console.impartsecurity.net/logomark-blue-white.png
 
 type: application
 
-version: 0.36.3
-appVersion: "0.36.3"
+version: 0.37.0
+appVersion: "0.37.0"
 
 keywords:
   - security

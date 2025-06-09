@@ -1,6 +1,20 @@
 
 # Changelog
 
+## [0.37.0] - 2025-06-09
+
+### Added
+
+- Webhook certificate rotation
+
+### Changed
+
+- Bumped container versions
+  - `0.37.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.37.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.37.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.37.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
 ## [0.36.3] - 2025-05-30
 
 ### Changed

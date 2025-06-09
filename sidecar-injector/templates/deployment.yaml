@@ -13,12 +13,13 @@
 {{- $tlsKey = index $secret.data "tls.key" }}
 {{- $caCrt = index $secret.data "ca.crt" }}
 {{- else -}}
-{{- $ca := genCA (printf "%s-ca" .Release.Namespace) 3650 }}
+{{- $expiration := .Values.webhookinjector.certificate.rotation.expiration | int | default 365 }}
+{{- $ca := genCA (printf "%s-ca" .Release.Namespace) $expiration }}
 {{- $svcName := include "sidecar-injector.fullname" . }}
 {{- $cn := printf "%s.%s.svc" $svcName .Release.Namespace }}
 {{- $altName1 := printf "%s.cluster.local" $cn }}
 {{- $altName2 := printf "%s" $cn }}
-{{- $server := genSignedCert $cn nil (list $altName1 $altName2) 365 $ca }}
+{{- $server := genSignedCert $cn nil (list $altName1 $altName2) $expiration $ca }}
 {{- $tlsCrt = b64enc $server.Cert }}
 {{- $tlsKey = b64enc $server.Key }}
 {{- $caCrt =  b64enc $ca.Cert }}

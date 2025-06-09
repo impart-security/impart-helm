@@ -1,0 +1,95 @@
+{{- if .Values.webhookinjector.certificate.generate }}
+{{- if dig "webhookinjector" "certificate" "rotation" "enabled" false (.Values.AsMap) }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: [ {{ include "sidecar-injector.certificateSecretName" . }}]
+    verbs: ["get", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: [{{ include "sidecar-injector.fullname" . }}]
+    verbs: ["get", "patch", "update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+rules:
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["mutatingwebhookconfigurations"]
+    resourceNames: [{{ include "sidecar-injector.fullname" . }}]
+    verbs: ["get", "update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: "0 0 * * *" # Daily at midnight
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+          containers:
+            - name: {{ include "sidecar-injector.fullname" . }}-cert-rotator
+              securityContext:
+                {{- toYaml .Values.webhookinjector.securityContext | nindent 16 }}
+              image: "{{ .Values.webhookinjector.image.repository }}"
+              imagePullPolicy: {{ .Values.webhookinjector.image.pullPolicy }}
+              args:
+              - rotate-cert
+              - --namespace={{ .Release.Namespace }}
+              - --secret={{ include "sidecar-injector.certificateSecretName" . }}
+              - --webhook={{ include "sidecar-injector.fullname" . }}
+              - --expiration={{ .Values.webhookinjector.certificate.rotation.expiration }}
+              - --rotate-before={{ .Values.webhookinjector.certificate.rotation.rotateBefore }}
+          restartPolicy: OnFailure
+{{- end -}}
+{{- end -}}
