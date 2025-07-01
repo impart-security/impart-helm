@@ -1,6 +1,13 @@
 
 # Changelog
 
+## [0.37.3] - 2025-07-01
+
+### Added 
+- Webhook failure policy option
+- Inspector state cache size option
+- Ability to add additional environment variables for the Inspector sidecar
+
 ## [0.37.2] - 2025-06-11
 
 ### Changed

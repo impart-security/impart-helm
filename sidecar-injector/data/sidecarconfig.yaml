@@ -108,7 +108,11 @@ containers:
   {{- if .Values.inspector.grpcExtprocMaxBodySize }}
   - name: INSPECTOR_GRPC_EXTPROC_MAX_BODY_SIZE
     value: "{{ .Values.inspector.grpcExtprocMaxBodySize }}"
-  {{- end }}    
+  {{- end }}
+  {{- if .Values.inspector.stateCacheSize }}
+  - name: INSPECTOR_INSPECTION_STATE_CACHE_SIZE
+    value: "{{ .Values.inspector.stateCacheSize }}"
+  {{- end }}
   {{- if .Values.inspector.auth.apiSecretRef }}
   - name: INSPECTOR_API_CLIENT_SECRET
     valueFrom:
@@ -119,6 +123,9 @@ containers:
   {{- if .Values.inspector.auth.accessTokenFileSecretRef }}
   - name: INSPECTOR_API_ACCESS_TOKEN_FILE_PATH
     value: "/etc/api-token-secret/accessToken"
+  {{- end }}
+  {{- with .Values.inspector.extraEnv }}
+  {{- toYaml . | nindent 2 }}
   {{- end }}
   resources:
     {{- toYaml .Values.inspector.resources | nindent 4 }}

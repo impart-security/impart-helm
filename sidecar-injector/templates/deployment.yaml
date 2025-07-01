@@ -59,7 +59,7 @@ webhooks:
         apiVersions: ["v1"]
         resources:
           - pods
-    failurePolicy: Fail
+    failurePolicy: {{ .Values.webhookinjector.failurePolicy }}
     sideEffects: None
     objectSelector:
       matchLabels:

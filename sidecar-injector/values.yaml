@@ -51,6 +51,7 @@ webhookinjector:
     caCrt: ""
     tlsCrt: ""
     tlsKey: ""
+  failurePolicy: Fail
 
 proxyinit:
   enabled: true
@@ -97,8 +98,10 @@ inspector:
   statsdAddr: ""
   clusterGroup: ""
   # grpcExtprocMaxBodySize: 10000
+  # stateCacheSize: 50
   securityContext:
     runAsUser: 2103
+  # extraEnv: []
 
   auth:
     tenantDomain: ""
