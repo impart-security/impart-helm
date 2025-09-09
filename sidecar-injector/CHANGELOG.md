@@ -1,5 +1,14 @@
-
 # Changelog
+
+## [0.40.0] - 2025-09-09
+
+### Changed
+
+- Bumped container versions
+  - `0.40.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.40.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.40.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.40.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
 
 ## [0.39.3] - 2025-08-20
 
@@ -44,7 +53,8 @@
 
 ## [0.37.3] - 2025-07-01
 
-### Added 
+### Added
+
 - Webhook failure policy option
 - Inspector state cache size option
 - Ability to add additional environment variables for the Inspector sidecar
@@ -758,7 +768,6 @@
 ### Added
 
 - `inspector.sigtermDelaySeconds: 20` to chart values. The number of seconds to wait after the Inspector received a sigterm before shutting down; default is 20 seconds. This allows time for the pod to be deregistered from the load balancer and for existing connections finish. More information on k8s graceful shutdown:
-
   - https://learnk8s.io/graceful-shutdown
   - https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace
   - https://easoncao.com/zero-downtime-deployment-when-using-alb-ingress-controller-on-amazon-eks-and-prevent-502-error/
@@ -781,4 +790,3 @@
   - `alpha` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
   - `alpha` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
   - `alpha` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
-
