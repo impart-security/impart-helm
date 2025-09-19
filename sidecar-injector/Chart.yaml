@@ -6,8 +6,8 @@ icon: https://console.impartsecurity.net/logomark-blue-white.png
 
 type: application
 
-version: 0.40.0
-appVersion: "0.40.0"
+version: 0.40.1
+appVersion: "0.40.1"
 
 keywords:
   - security

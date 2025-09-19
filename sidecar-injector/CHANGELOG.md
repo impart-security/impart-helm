@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.40.1] - 2025-09-19
+
+### Added
+
+- Support for `impart-inspector-extra-env` annotation to add additional environment variables to the inspector container via JSON array format
+- Support for `impart-inspector-proxy-config` annotation to provide complete inspector proxy configuration override
+
+### Changed
+
+- Bumped container versions
+  - `0.40.1` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.40.0] - 2025-09-09
 
 ### Changed

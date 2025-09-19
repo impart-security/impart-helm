@@ -45,12 +45,118 @@ $ helm delete impart
 
 ## Annotations
 
-| Annotation Name                                                | Description                                                                                                                      |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| <nobr>impart-inspector-sidecar-http-listener-disable-tls<nobr> | Listens and serves http. "true" or "false" string values                                                                         |
-| <nobr>impart-inspector-sidecar-container-backend-scheme<nobr>  | Overrides http or https backend scheme. Typical scenario when inspector termanates ssl and pushes traffic into http backed port. |
-| <nobr>impart-inspector-sidecar-tls-secret<nobr>                | Sets kubernetes ssl secret.                                                                                                      |
-| <nobr>impart-inspector-plugin-mode<nobr>                       | Installs inspector without intercepting the traffic. Requires a plugin to interact with the inspector. Values "tcp" - sets insepctor mode to tcp_server, "socket" - sets inspector mode to unix_socket_server, "socket+volume" - sets inspector mode to unix_socket_server and creates and mounts socket volume.                        |
+The sidecar injector supports the following annotations for customizing inspector behavior on a per-pod basis:
+
+| Annotation Name | Description | Type | Example/Values |
+|-----------------|-------------|------|----------------|
+| `impart-inspector-sidecar-container-backend-scheme` | Overrides http or https backend scheme. Used when inspector terminates SSL and forwards to HTTP backend | string | `http`, `https` |
+| `impart-inspector-sidecar-http-listener-disable-tls` | Disables TLS on the HTTP listener, serves plain HTTP | boolean string | `"true"`, `"false"` |
+| `impart-inspector-sidecar-destination-addr` | Override destination address for the sidecar | string | `localhost:8080` |
+| `impart-inspector-grpc-listen-addr` | gRPC listener address for external processing | string | `:20212` |
+| `impart-inspector-grpc-extproc-max-body-size` | Maximum body size for gRPC external processing | string | `1048576` |
+| `impart-inspector-mode` | Sets the inspector operation mode | string | `grpc_server` |
+| `impart-inspector-image` | Override the inspector container image | string | `impart/inspector:v1.2.3` |
+| `impart-tcp-listen-addr` | TCP listener address | string | `:8080` |
+| `impart-inspector-cluster-group` | Cluster group identifier for grouping related services | string | `production-cluster` |
+| `impart-inspector-logstream-id` | Log stream identifier for centralized logging | string | `app-logs-123` |
+| `impart-inspector-logstream-log-tail-file` | File path for log tailing | string | `/var/log/app.log` |
+| `impart-inspector-sidecar-tls-secret` | Kubernetes secret name containing TLS certificates | string | `my-tls-secret` |
+| `impart-inspector-access-token-secret` | Kubernetes secret name containing the Impart access token | string | `impart-access-token` |
+| `impart-proxy-init-enabled` | Enables the proxy init container for traffic interception | boolean string | `"true"`, `"false"` |
+| `impart-inspector-plugin-mode` | Configures inspector for plugin-based operation without traffic interception | string | `tcp`, `socket`, `socket+volume` |
+| `impart-inspector-extra-env` | Additional environment variables for the inspector container as JSON/YAML array | JSON/YAML array | `[{"name":"DEBUG","value":"true"}]` |
+| `impart-inspector-proxy-config` | Complete inspector configuration as JSON/YAML object, allows overriding all settings defined in helm values for inspector | JSON/YAML object | See detailed examples below |
+
+### Special Annotation Formats
+
+**Proxy Configuration (`impart-inspector-proxy-config`)**
+
+The `impart-inspector-proxy-config` annotation allows you to provide a complete inspector configuration as either JSON or YAML.
+
+**JSON Example:**
+```yaml
+annotations:
+  impart-inspector-proxy-config: |
+    {
+      "mode": "sidecar_proxy",
+      "logLevel": "debug",
+      "port": 14143,
+      "resources": {
+        "limits": {
+          "cpu": "2",
+          "memory": "4Gi"
+        },
+        "requests": {
+          "cpu": "500m",
+          "memory": "1Gi"
+        }
+      }
+    }
+```
+
+**YAML Example:**
+```yaml
+annotations:
+  impart-inspector-proxy-config: |
+    mode: sidecar_proxy
+    logLevel: debug
+    port: 14143
+    resources:
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+```
+
+**Priority and Override Behavior:**
+1. **Proxy config takes precedence** over default Helm values
+2. **Individual annotations can still override** proxy config values for maximum flexibility
+3. **Individual annotations are processed after** proxy config, allowing fine-tuning
+
+**Extra Environment Variables (`impart-inspector-extra-env`)**
+
+Accepts a JSON or YAML array of environment variable objects. **Note: Only new environment variables are added - existing ones will not be overridden to prevent breaking core inspector functionality.**
+
+**JSON Format:**
+```yaml
+annotations:
+  impart-inspector-extra-env: |
+    [
+      {"name": "DEBUG", "value": "true"},
+      {"name": "CUSTOM_CONFIG", "value": "production"},
+      {"name": "LOG_LEVEL", "value": "info"}
+    ]
+```
+
+**YAML Format:**
+```yaml
+annotations:
+  impart-inspector-extra-env: |
+    - name: DEBUG
+      value: "true"
+    - name: SECRET_VAR
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: password
+    - name: CUSTOM_CONFIG
+      value: production
+```
+
+Each environment variable object must have:
+- `name` (string): The environment variable name
+- `value` (string): The environment variable value **OR**
+- `valueFrom` (object): Reference to get the value from a secret, configMap, etc.
+
+**Important:** If an environment variable with the same name already exists in the base inspector configuration, it will be skipped to preserve critical functionality.
+
+**Plugin Mode Values (`impart-inspector-plugin-mode`)**
+
+- `tcp`: Sets inspector mode to `tcp_server` for TCP-based plugin communication
+- `socket`: Sets inspector mode to `unix_socket_server` for Unix socket communication  
+- `socket+volume`: Sets inspector mode to `unix_socket_server` and creates/mounts a socket volume for shared access
 
 ## Installing as nginx ingress sidecar proxy
 
