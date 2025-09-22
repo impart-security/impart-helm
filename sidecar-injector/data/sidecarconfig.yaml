@@ -105,6 +105,25 @@ containers:
     value: {{ .Values.inspector.unixSocketPermissions }}
   - name: INSPECTOR_CLUSTER_GROUP
     value: {{ .Values.inspector.clusterGroup }}
+  {{- if and .Values.inspector.statsd .Values.inspector.statsd.tagsCsv }}
+  - name: INSPECTOR_STATSD_TAGS
+    value: "{{ .Values.inspector.statsd.tagsCsv }}"
+  {{- end }}
+  {{- if and .Values.inspector.statsd .Values.inspector.statsd.tags }}
+  {{- range .Values.inspector.statsd.tags }}
+  {{- if or .value .valueFrom }}
+  - name: INSPECTOR_STATSD_TAG_{{ .name | upper | replace "-" "_" }}
+    {{- if .value }}
+    value: "{{ .value }}"
+    {{- else if .valueFrom }}
+    valueFrom:
+      {{- toYaml .valueFrom | nindent 6 }}
+    {{- end }}
+  {{- else }}
+  {{- fail (printf "statsd.tags entry '%s' must have either 'value' or 'valueFrom' defined" .name) }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
   {{- if .Values.inspector.grpcExtprocMaxBodySize }}
   - name: INSPECTOR_GRPC_EXTPROC_MAX_BODY_SIZE
     value: "{{ .Values.inspector.grpcExtprocMaxBodySize }}"

@@ -78,7 +78,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.40.1
+    repository: impartsecurity/inspector:0.40.2
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -95,6 +95,31 @@ inspector:
   unixSocketPermissions: 0666
   statsdAddr: ""
   clusterGroup: ""
+  statsd:
+    # Comma-separated tags for INSPECTOR_STATSD_TAGS environment variable
+    # Example: "env:production,region:us-west-2,version:1.2.3"
+    tagsCsv: ""
+
+    # Individual tags with advanced Kubernetes capabilities
+    # Each tag becomes INSPECTOR_STATSD_TAG_<NAME> environment variable
+    tags: []
+    # Examples:
+    # - name: APPLICATION
+    #   value: my-app
+    # - name: API_KEY
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: impart-secrets
+    #       key: apiKey
+    # - name: CLUSTER_NAME
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: cluster-config
+    #       key: name
+    # - name: NODE_NAME
+    #   valueFrom:
+    #     fieldRef:
+    #       fieldPath: spec.nodeName
   # grpcExtprocMaxBodySize: 10000
   # stateCacheSize: 50
   securityContext:
