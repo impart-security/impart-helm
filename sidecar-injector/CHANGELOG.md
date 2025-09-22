@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.40.2] - 2025-09-22
+
+### Changed
+
+- Bumped container versions
+  - `0.40.1` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.40.1` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.40.1` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
 ## [0.40.1] - 2025-09-19
 
 ### Added

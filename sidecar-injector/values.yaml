@@ -1,7 +1,7 @@
 ---
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.40.0
+    repository: impartsecurity/k8s-webhook-injector:0.40.1
     pullPolicy: IfNotPresent
     pullSecrets: []
   logLevel: "2"
@@ -54,7 +54,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.40.0
+    repository: impartsecurity/k8s-sidecar-init:0.40.1
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -122,7 +122,7 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.40.0
+    repository: impartsecurity/control-node:0.40.1
     pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946
