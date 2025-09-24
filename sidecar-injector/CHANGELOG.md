@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.40.4] - 2025-09-24
+
+- Bumped container versions
+  - `0.40.3` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.40.3] - 2025-09-22
 
 ### Changed
