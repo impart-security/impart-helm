@@ -65,18 +65,18 @@ The sidecar injector supports the following annotations for customizing inspecto
 | `impart-proxy-init-enabled` | Enables the proxy init container for traffic interception | boolean string | `"true"`, `"false"` |
 | `impart-inspector-plugin-mode` | Configures inspector for plugin-based operation without traffic interception | string | `tcp`, `socket`, `socket+volume` |
 | `impart-inspector-extra-env` | Additional environment variables for the inspector container as JSON/YAML array | JSON/YAML array | `[{"name":"DEBUG","value":"true"}]` |
-| `impart-inspector-proxy-config` | Complete inspector configuration as JSON/YAML object, allows overriding all settings defined in helm values for inspector | JSON/YAML object | See detailed examples below |
+| `impart-inspector-sidecar-config` | Complete inspector configuration as JSON/YAML object, allows overriding all settings defined in helm values for inspector | JSON/YAML object | See detailed examples below |
 
 ### Special Annotation Formats
 
-**Proxy Configuration (`impart-inspector-proxy-config`)**
+**Proxy Configuration (`impart-inspector-sidecar-config`)**
 
-The `impart-inspector-proxy-config` annotation allows you to provide a complete inspector configuration as either JSON or YAML.
+The `impart-inspector-sidecar-config` annotation allows you to provide a complete inspector configuration as either JSON or YAML.
 
 **JSON Example:**
 ```yaml
 annotations:
-  impart-inspector-proxy-config: |
+  impart-inspector-sidecar-config: |
     {
       "mode": "sidecar_proxy",
       "logLevel": "debug",
@@ -97,7 +97,7 @@ annotations:
 **YAML Example:**
 ```yaml
 annotations:
-  impart-inspector-proxy-config: |
+  impart-inspector-sidecar-config: |
     mode: sidecar_proxy
     logLevel: debug
     port: 14143

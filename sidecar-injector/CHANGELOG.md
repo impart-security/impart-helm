@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.40.5] - 2025-10-01
+
+### Added
+
+- Annotation `impart-inspector-sidecar-config` support to override inspector config values.
+
+### Deprecated
+
+- Annotation `impart-inspector-proxy-config` (will be removed in a future release). `impart-inspector-sidecar-config` should be used instead.
+
+### Changed
+
+- Bumped container versions
+  - `0.40.4` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.40.4] - 2025-09-24
 
 - Bumped container versions
