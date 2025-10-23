@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.41.0] - 2025-10-23
+
+### Added
+
+- `inspector.metricsUploadEnabled` setting to enable inspector metrics upload to Impart cloud. Default is `false` but will be changed to `true` in `0.42.0`.
+
+### Changed
+
+- `inspector.gossipEnabled` now defaults to `"false"`. To enable gossip, explicitly set this value to `"true"`.
+
 ## [0.40.5] - 2025-10-01
 
 ### Added
