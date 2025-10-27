@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.1] - 2025-10-27
+
+### Changed
+
+- Bumped container versions
+  - `0.41.1` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.41.0] - 2025-10-23
 
 ### Added
@@ -9,6 +16,11 @@
 ### Changed
 
 - `inspector.gossipEnabled` now defaults to `"false"`. To enable gossip, explicitly set this value to `"true"`.
+- Bumped container versions
+  - `0.41.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.41.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.41.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.41.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
 
 ## [0.40.5] - 2025-10-01
 
