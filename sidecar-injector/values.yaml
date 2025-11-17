@@ -1,7 +1,7 @@
 ---
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.41.0
+    repository: impartsecurity/k8s-webhook-injector:0.42.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   logLevel: "2"
@@ -10,6 +10,8 @@ webhookinjector:
   additionalVolumes: []
   # specify where the additional volumes are mounted in the sidecar-injector container
   additionalVolumeMounts: []
+  # specify additional pod annotations
+  podAnnotations: {}
   objectSelectorLabel: impart-inspector-injection
   resources: {}
   replicaCount: 1
@@ -54,7 +56,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.41.0
+    repository: impartsecurity/k8s-sidecar-init:0.42.0
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -78,7 +80,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.41.3
+    repository: impartsecurity/inspector:0.42.0
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -91,12 +93,13 @@ inspector:
   logFormat: "json"
   gossipEnabled: "false"
   # Enable inspector metrics upload to Impart cloud
-  metricsUploadEnabled: false
+  metricsUploadEnabled: true
   ruleWorkersPool: "40"
   unixSocketPath: "/var/run/impart/inspector.sock"
   unixSocketPermissions: 0666
   statsdAddr: ""
   clusterGroup: ""
+  nativeSidecar: false
   statsd:
     # Comma-separated tags for INSPECTOR_STATSD_TAGS environment variable
     # Example: "env:production,region:us-west-2,version:1.2.3"
@@ -149,7 +152,7 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.41.0
+    repository: impartsecurity/control-node:0.42.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946
@@ -159,6 +162,8 @@ controlnode:
   additionalVolumes: []
   # specify where the additional volumes are mounted in the sidecar-injector container
   additionalVolumeMounts: []
+  # specify additional pod annotations
+  podAnnotations: {}
   resources: {}
   serviceAccount:
     create: true

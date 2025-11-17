@@ -28,6 +28,10 @@ spec:
       {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.controlnode.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 8 }}
     spec:

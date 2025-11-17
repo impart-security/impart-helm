@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.42.0] - 2025-11-17
+
+### Added
+
+- Native sidecar support for inspector via `inspector.nativeSidecar` configuration (requires Kubernetes 1.28+).
+- Per-pod native sidecar override via `impart-inspector-native-sidecar` annotation.
+- podAnnotations for webhookinjector and controlnode pods.
+- TTL for certificate rotator job.
+
+### Changed
+
+- `inspector.metricsUploadEnabled` now defaults to `true`. Inspector metrics will be uploaded to Impart cloud by default. To disable metrics upload, explicitly set this value to `false`.
+
 ## [0.41.3] - 2025-11-03
 
 ### Changed

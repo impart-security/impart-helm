@@ -106,6 +106,9 @@ spec:
         {{- end }}
         checksum/values: {{ toJson .Values | sha256sum }}
         checksum/webhook-sidecar-config: {{ (.Files.Get (printf "%s/../data/sidecarconfig.yaml" $.Template.BasePath) | sha256sum) }}
+        {{- with .Values.webhookinjector.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
     spec:
@@ -135,6 +138,8 @@ spec:
             value: "{{ .Values.webhookinjector.logLevel }}"
           - name: WEBHOOK-INJECTOR_LOG_FORMAT
             value: "{{ .Values.webhookinjector.logFormat }}"
+          - name: WEBHOOK-INJECTOR_NATIVE-SIDECAR
+            value: "{{ .Values.inspector.nativeSidecar }}"
           resources:
             {{- toYaml .Values.webhookinjector.resources | nindent 12 }}
           volumeMounts:
