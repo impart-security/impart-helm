@@ -80,7 +80,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.42.0
+    repository: impartsecurity/inspector:0.42.1
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -94,7 +94,7 @@ inspector:
   gossipEnabled: "false"
   # Enable inspector metrics upload to Impart cloud
   metricsUploadEnabled: true
-  ruleWorkersPool: "40"
+  ruleWorkersPool: "0"
   unixSocketPath: "/var/run/impart/inspector.sock"
   unixSocketPermissions: 0666
   statsdAddr: ""

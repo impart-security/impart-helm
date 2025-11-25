@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.42.1] - 2025-11-25
+
+### Changed
+
+- `inspector.ruleWorkersPool` now defaults to `"0"` for automatic pool sizing based on CPU cores, matching inspector release `0.42.0`. Previously defaulted to `40` fixed workers. Set to a positive integer to override with a fixed pool size.
+- Bumped container versions
+  - `0.42.1` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.42.0] - 2025-11-17
 
 ### Added
@@ -12,6 +20,11 @@
 ### Changed
 
 - `inspector.metricsUploadEnabled` now defaults to `true`. Inspector metrics will be uploaded to Impart cloud by default. To disable metrics upload, explicitly set this value to `false`.
+- Bumped container versions
+  - `0.42.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.42.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.42.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.42.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
 
 ## [0.41.3] - 2025-11-03
 
