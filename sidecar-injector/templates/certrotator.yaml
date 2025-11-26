@@ -69,6 +69,15 @@ kind: CronJob
 metadata:
   name: {{ include "sidecar-injector.fullname" . }}-cr
   namespace: {{ .Release.Namespace }}
+  {{- with .Values.certrotator.cronJobAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "sidecar-injector.labels" . | nindent 4 }}
+    {{- with .Values.certrotator.cronJobLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   schedule: "0 0 * * *" # Daily at midnight
   concurrencyPolicy: Forbid
@@ -76,6 +85,16 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          {{- with .Values.certrotator.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "sidecar-injector.selectorLabels" . | nindent 12 }}
+            {{- with .Values.certrotator.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         spec:
           serviceAccountName: {{ include "sidecar-injector.fullname" . }}-cr
           containers:
@@ -91,6 +110,18 @@ spec:
               - --webhook={{ include "sidecar-injector.fullname" . }}
               - --expiration={{ .Values.webhookinjector.certificate.rotation.expiration }}
               - --rotate-before={{ .Values.webhookinjector.certificate.rotation.rotateBefore }}
+              {{- with .Values.certrotator.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- with .Values.certrotator.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.certrotator.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
 {{- end -}}
 {{- end -}}

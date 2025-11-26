@@ -12,6 +12,10 @@ webhookinjector:
   additionalVolumeMounts: []
   # specify additional pod annotations
   podAnnotations: {}
+  # specify custom labels for pod spec
+  podLabels: {}
+  # specify custom labels for deployment
+  deploymentLabels: {}
   objectSelectorLabel: impart-inspector-injection
   resources: {}
   replicaCount: 1
@@ -80,7 +84,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.42.1
+    repository: impartsecurity/inspector:0.42.2
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -164,6 +168,10 @@ controlnode:
   additionalVolumeMounts: []
   # specify additional pod annotations
   podAnnotations: {}
+  # specify custom labels for pod spec
+  podLabels: {}
+  # specify custom labels for deployment
+  deploymentLabels: {}
   resources: {}
   serviceAccount:
     create: true
@@ -178,3 +186,18 @@ controlnode:
     type: ClusterIP
     port: 7946
     targetPort: 7946
+
+# Certificate rotator cronjob configuration
+# This cronjob is only deployed when webhookinjector.certificate.rotation.enabled is true
+certrotator:
+  # specify annotations for cronjob
+  cronJobAnnotations: {}
+  # specify annotations for pod spec
+  podAnnotations: {}
+  # specify custom labels for cronjob
+  cronJobLabels: {}
+  # specify custom labels for pod spec
+  podLabels: {}
+  resources: {}
+  affinity: {}
+  tolerations: []

@@ -21,6 +21,9 @@ metadata:
   name: {{ include "sidecar-injector.controlnode.fullname" . }}
   labels:
     {{- include "sidecar-injector.controlnode.labels" . | nindent 4 }}
+    {{- with .Values.controlnode.deploymentLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: 1
   selector:
@@ -34,6 +37,9 @@ spec:
       {{- end }}
       labels:
         {{- include "sidecar-injector.controlnode.selectorLabels" . | nindent 8 }}
+        {{- with .Values.controlnode.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.controlnode.image.pullSecrets }}
       imagePullSecrets:

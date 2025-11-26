@@ -72,6 +72,9 @@ metadata:
   name: {{ include "sidecar-injector.fullname" . }}
   labels:
     {{- include "sidecar-injector.labels" . | nindent 4 }}
+    {{- with .Values.webhookinjector.deploymentLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not .Values.webhookinjector.autoscaling.enabled }}
   replicas: {{ .Values.webhookinjector.replicaCount }}
@@ -111,6 +114,9 @@ spec:
         {{- end }}
       labels:
         {{- include "sidecar-injector.selectorLabels" . | nindent 8 }}
+        {{- with .Values.webhookinjector.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.webhookinjector.image.pullSecrets }}
       imagePullSecrets:

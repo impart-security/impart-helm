@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.42.2] - 2025-11-26
+
+### Added
+
+- Custom labels support via `webhookinjector.podLabels` and `webhookinjector.deploymentLabels` for webhook injector deployment and pods.
+- Custom labels support via `controlnode.podLabels` and `controlnode.deploymentLabels` for control node deployment and pods.
+- Certificate rotator cronjob configuration via new `certrotator` object with `cronJobAnnotations`, `podAnnotations`, `cronJobLabels`, `podLabels`, `resources`, `affinity`, and `tolerations`.
+
+### Changed
+
+- Bumped container versions
+  - `0.42.2` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+
 ## [0.42.1] - 2025-11-25
 
 ### Changed
