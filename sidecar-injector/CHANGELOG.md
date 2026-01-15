@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.42.7] - 2026-01-15
+
+### Changed
+
+- Support incoming traffic interception on specific ports in the proxy-intercept mode.
+
 ## [0.42.6] - 2026-01-05
 
 ### Changed

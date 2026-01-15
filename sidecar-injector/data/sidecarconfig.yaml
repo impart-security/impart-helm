@@ -28,7 +28,9 @@ initContainers:
     "--inspector-port",
     "{{ .Values.inspector.port }}",
     "--proxy-intercept-uid",
-    "{{ .Values.proxyinit.proxyIntercept.userUid }}"
+    "{{ .Values.proxyinit.proxyIntercept.userUid }}",
+    "--traffic-origin",
+    "{{ .Values.proxyinit.proxyIntercept.trafficOrigin | default "local" }}"
     {{- else }}
     "--mode",
     "proxy"
@@ -144,6 +146,25 @@ containers:
   {{- if .Values.inspector.auth.accessTokenFileSecretRef }}
   - name: INSPECTOR_API_ACCESS_TOKEN_FILE_PATH
     value: "/etc/api-token-secret/accessToken"
+  {{- end }}
+  {{- if .Values.inspector.redisSecretRef }}
+  - name: INSPECTOR_REDIS_TRACKING_ENABLED
+    value: "true"
+  - name: INSPECTOR_REDIS_ADDRS
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.redisSecretRef }}
+        key: addr
+  - name: INSPECTOR_REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.redisSecretRef }}
+        key: password
+  - name: INSPECTOR_REDIS_TLS_ENABLED
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.redisSecretRef }}
+        key: tls
   {{- end }}
   {{- with .Values.inspector.extraEnv }}
   {{- toYaml . | nindent 2 }}

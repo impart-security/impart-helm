@@ -60,7 +60,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.42.3
+    repository: impartsecurity/k8s-sidecar-init:0.42.4
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -68,8 +68,9 @@ proxyinit:
   # advanced scenario when inspector is depoyed into gateway pod alongside with a service mesh proxy (like linkerd)
   proxyIntercept:
     enabled: false # enable proxy intercept
+    trafficOrigin: "local" # "local" = intercept local outbound traffic | "external" = intercept external incoming traffic
     ingressListenPorts: ""
-    userUid: "" # uid of service mesh proxy (linkerd default 2102)
+    userUid: "" # uid of service mesh proxy to filter traffic (optional, linkerd default 2102). Leave empty to intercept all local traffic
   securityContext:
     allowPrivilegeEscalation: false
     runAsUser: 0
