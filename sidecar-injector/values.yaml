@@ -1,7 +1,7 @@
 ---
 webhookinjector:
   image:
-    repository: impartsecurity/k8s-webhook-injector:0.42.3
+    repository: impartsecurity/k8s-webhook-injector:0.43.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   logLevel: "2"
@@ -60,7 +60,7 @@ webhookinjector:
 proxyinit:
   enabled: true
   image:
-    repository: impartsecurity/k8s-sidecar-init:0.42.4
+    repository: impartsecurity/k8s-sidecar-init:0.43.0
     pullPolicy: IfNotPresent
   ignorePorts:
     inbound: ""
@@ -85,7 +85,7 @@ proxyinit:
 inspector:
   impartApiUrl: "https://api.impartsecurity.net/v0"
   image:
-    repository: impartsecurity/inspector:0.42.6
+    repository: impartsecurity/inspector:0.43.0
     pullPolicy: IfNotPresent
   # reference to kubernetes tls secret config
   tlsSecretRef: ""
@@ -99,6 +99,8 @@ inspector:
   gossipEnabled: "false"
   # Enable inspector metrics upload to Impart cloud
   metricsUploadEnabled: true
+  # Enable environment information collection (cloud, container, system metadata)
+  envinfoEnabled: true
   ruleWorkersPool: "0"
   unixSocketPath: "/var/run/impart/inspector.sock"
   unixSocketPermissions: 0666
@@ -157,7 +159,7 @@ controlnode:
   name: controlnode
   enabled: true
   image:
-    repository: impartsecurity/control-node:0.42.3
+    repository: impartsecurity/control-node:0.43.0
     pullPolicy: IfNotPresent
     pullSecrets: []
   port: 7946

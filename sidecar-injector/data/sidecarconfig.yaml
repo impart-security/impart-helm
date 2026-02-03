@@ -87,6 +87,8 @@ containers:
     value: {{ .Values.inspector.gossipEnabled }}
   - name: INSPECTOR_METRICS_UPLOAD_ENABLED
     value: {{ .Values.inspector.metricsUploadEnabled }}
+  - name: INSPECTOR_ENVINFO_ENABLED
+    value: {{ .Values.inspector.envinfoEnabled }}
   - name: INSPECTOR_RULE_WORKERS_POOL
     value: {{ .Values.inspector.ruleWorkersPool }}
   - name: INSPECTOR_SIGTERM_DELAY_SECONDS
