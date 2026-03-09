@@ -1,15 +1,24 @@
 # Changelog
 
-## Unreleased
+## [0.44.0] - 2026-03-09
 
-### Added
+### Removed
 
-- Flag to control env info collection.
-
-## [0.43.0] - 2026-02-02
+- Deprecated environment variables `INSPECTOR_API_CLIENT_ID`, `INSPECTOR_AUTH0_TENANT_DOMAIN`, and `INSPECTOR_JWT_AUDIENCE` along with corresponding values `inspector.auth.apiClientId`, `inspector.auth.tenantDomain`, and `inspector.auth.jwtAudience`.
 
 ### Changed
 
+- Bumped container versions
+  - `0.44.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.44.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.44.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.44.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
+
+## [0.43.0] - 2026-02-03
+
+### Changed
+
+- `inspector.envinfoEnabled` (`INSPECTOR_ENVINFO_ENABLED` env var) to control environment info collection. Default is `true`.
 - Bumped container versions
   - `0.43.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
   - `0.43.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)

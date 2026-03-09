@@ -99,12 +99,6 @@ containers:
     value: "/etc/tls-secret/tls.crt"
   - name: INSPECTOR_TLS_KEY
     value: "/etc/tls-secret/tls.key"
-  - name: INSPECTOR_AUTH0_TENANT_DOMAIN
-    value: {{ .Values.inspector.auth.tenantDomain }}
-  - name: INSPECTOR_JWT_AUDIENCE
-    value: {{ .Values.inspector.auth.jwtAudience }}
-  - name: INSPECTOR_API_CLIENT_ID
-    value: {{ .Values.inspector.auth.apiClientId }}
   - name: INSPECTOR_UNIX_SOCKET_PATH
     value: {{ .Values.inspector.unixSocketPath }}
   - name: INSPECTOR_UNIX_SOCKET_PERMISSIONS
