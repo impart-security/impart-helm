@@ -46,6 +46,10 @@ containers:
   securityContext:
     {{- toYaml .Values.inspector.securityContext | nindent 12 }}
   env:
+  - name: HOST_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
   - name: INSPECTOR_STATSD_ADDR
   {{- if .Values.inspector.statsdAddr }}
     value: "{{ .Values.inspector.statsdAddr }}"
@@ -103,6 +107,10 @@ containers:
     value: {{ .Values.inspector.unixSocketPath }}
   - name: INSPECTOR_UNIX_SOCKET_PERMISSIONS
     value: {{ .Values.inspector.unixSocketPermissions }}
+  - name: INSPECTOR_GRPC_LISTEN_ADDR
+    value: "{{ .Values.inspector.grpcListenAddr }}"
+  - name: INSPECTOR_GRPC_UNIX_SOCKET_PERMISSIONS
+    value: {{ .Values.inspector.grpcUnixSocketPermissions }}
   - name: INSPECTOR_CLUSTER_GROUP
     value: {{ .Values.inspector.clusterGroup }}
   {{- if and .Values.inspector.statsd .Values.inspector.statsd.tagsCsv }}

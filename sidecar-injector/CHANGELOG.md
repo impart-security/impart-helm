@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.44.2] - 2026-05-28
+
+### Fixed
+
+- `webhookinjector.priorityClassName` is now rendered at `spec.template.spec.priorityClassName` (PodSpec) on the injector Deployment instead of `spec.priorityClassName`, and is omitted when unset. The misplaced field was rejected by clusters with strict OpenAPI schema validation and silently pruned (no priority class applied) on clusters without it.
+- `ttlSecondsAfterFinished` on the cert-rotator CronJob is now rendered at `spec.jobTemplate.spec.ttlSecondsAfterFinished` (JobSpec) instead of `spec.ttlSecondsAfterFinished`. The misplaced field was rejected by clusters with strict OpenAPI schema validation and silently pruned (finished jobs never cleaned up) on clusters without it.
+
+### Added
+
+- `HOST_IP` environment variable exposed via Kubernetes downward API (`status.hostIP`) on the inspector sidecar container. Enables `$(HOST_IP)` interpolation in values like `statsdAddr`.
+- `inspector.grpcListenAddr` and `inspector.grpcUnixSocketPermissions` values, rendered as `INSPECTOR_GRPC_LISTEN_ADDR` / `INSPECTOR_GRPC_UNIX_SOCKET_PERMISSIONS`. Set `grpcListenAddr` to a `unix://` URI with the `grpc+socket+volume` plugin-mode for Envoy Gateway ext_proc over a Unix domain socket. Mirrors `inspector.unixSocketPath` / `inspector.unixSocketPermissions` for `socket+volume`.
+
 ## [0.44.1] - 2026-03-17
 
 ### Changed

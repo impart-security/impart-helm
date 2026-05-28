@@ -104,6 +104,10 @@ inspector:
   ruleWorkersPool: "0"
   unixSocketPath: "/var/run/impart/inspector.sock"
   unixSocketPermissions: 0666
+  # gRPC ext_proc listener. Set grpcListenAddr to a unix:// URI for the
+  # grpc+socket+volume plugin-mode (Envoy Gateway over a Unix domain socket).
+  grpcListenAddr: ":20212"
+  grpcUnixSocketPermissions: 0666
   statsdAddr: ""
   clusterGroup: ""
   nativeSidecar: false

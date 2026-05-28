@@ -81,9 +81,9 @@ metadata:
 spec:
   schedule: "0 0 * * *" # Daily at midnight
   concurrencyPolicy: Forbid
-  ttlSecondsAfterFinished: 86400   # 24 hours
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 86400   # 24 hours
       template:
         metadata:
           {{- with .Values.certrotator.podAnnotations }}

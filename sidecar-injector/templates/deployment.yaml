@@ -79,7 +79,6 @@ spec:
   {{- if not .Values.webhookinjector.autoscaling.enabled }}
   replicas: {{ .Values.webhookinjector.replicaCount }}
   {{- end }}
-  priorityClassName: {{ .Values.webhookinjector.priorityClassName }}
   selector:
     matchLabels:
       {{- include "sidecar-injector.selectorLabels" . | nindent 6 }}
@@ -123,6 +122,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "sidecar-injector.serviceAccountName" . }}
+      {{- with .Values.webhookinjector.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
       securityContext:
         {{- toYaml .Values.webhookinjector.podSecurityContext | nindent 8 }}
       containers:

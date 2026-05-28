@@ -157,6 +157,7 @@ Each environment variable object must have:
 - `tcp`: Sets inspector mode to `tcp_server` for TCP-based plugin communication
 - `socket`: Sets inspector mode to `unix_socket_server` for Unix socket communication  
 - `socket+volume`: Sets inspector mode to `unix_socket_server` and creates/mounts a socket volume for shared access
+- `grpc+socket+volume`: Sets inspector mode to `grpc_server` and creates a socket volume mounted into the injected container **and every other container in the pod** (e.g. the Envoy data-plane container) so they share the socket — for Envoy Gateway ext_proc over a Unix domain socket (no `Backend` loopback restriction, no StrategicMerge patch). The listen address and socket permissions come from the `inspector.grpcListenAddr` (set to a `unix://` URI) and `inspector.grpcUnixSocketPermissions` chart values, mirroring `inspector.unixSocketPath` / `inspector.unixSocketPermissions` for `socket+volume`.
 
 ## Installing as nginx ingress sidecar proxy
 
