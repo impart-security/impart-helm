@@ -101,6 +101,11 @@ inspector:
   metricsUploadEnabled: true
   # Enable environment information collection (cloud, container, system metadata)
   envinfoEnabled: true
+  # Upload penalty-box events/counts to the API (powers the Attackers surface).
+  # Enforcement is unaffected by this. Requires a client-hash seed (see
+  # clientHashSeedSecretRef); without one the inspector keeps this disabled and
+  # logs a warning, so reversible client PII never reaches the API.
+  penaltyBoxDataEnabled: false
   ruleWorkersPool: "0"
   unixSocketPath: "/var/run/impart/inspector.sock"
   unixSocketPermissions: 0666
@@ -146,6 +151,15 @@ inspector:
     apiSecretRef: ""
     accessTokenSecretRef: ""
     accessTokenFileSecretRef: "" # access token secret mounted as file
+  # Name of a Secret (key: clientHashSeed) whose value keys the client-identifier
+  # hash so penalty-box hashes are non-reversible. Required to enable the
+  # penalty-box data pipeline (penaltyBoxDataEnabled): without it pbox
+  # events/counts are suppressed; enforcement is unaffected.
+  # You must create this Secret yourself, in EACH namespace where inspector
+  # sidecars are injected (same as the access-token secret) — the injector
+  # cannot create secrets in customer namespaces. Use the same value across all
+  # of the org's inspectors so their hashes correlate.
+  clientHashSeedSecretRef: ""
   additionalVolumes: []
   additionalVolumeMounts: []
   resources:

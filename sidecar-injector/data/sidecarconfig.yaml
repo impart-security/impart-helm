@@ -77,6 +77,16 @@ containers:
         name: {{ .Values.inspector.auth.accessTokenSecretRef }}
         key: accessToken
   {{- end }}
+  {{- if .Values.inspector.clientHashSeedSecretRef }}
+  - name: INSPECTOR_CLIENT_HASH_SEED
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.inspector.clientHashSeedSecretRef }}
+        key: clientHashSeed
+        # Optional: a missing seed secret degrades to "no seed" (penalty-box data
+        # disabled) rather than blocking inspector startup.
+        optional: true
+  {{- end }}
   {{- if .Values.controlnode.enabled }}
   - name: INSPECTOR_GOSSIP_PEER_ADDR
   {{- $gossipSvcName := include "sidecar-injector.controlnode.fullname" . -}}
@@ -93,6 +103,8 @@ containers:
     value: {{ .Values.inspector.metricsUploadEnabled }}
   - name: INSPECTOR_ENVINFO_ENABLED
     value: {{ .Values.inspector.envinfoEnabled }}
+  - name: INSPECTOR_PENALTY_BOX_DATA_ENABLED
+    value: "{{ .Values.inspector.penaltyBoxDataEnabled }}"
   - name: INSPECTOR_RULE_WORKERS_POOL
     value: {{ .Values.inspector.ruleWorkersPool }}
   - name: INSPECTOR_SIGTERM_DELAY_SECONDS

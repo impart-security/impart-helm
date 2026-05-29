@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- `inspector.clientHashSeedSecretRef` — name of a Secret (key `clientHashSeed`) whose value keys the client-identifier hash so penalty-box hashes are non-reversible, rendered as `INSPECTOR_CLIENT_HASH_SEED` via an `optional` `secretKeyRef` (a missing secret degrades to "no seed", never blocks startup). The Secret must exist in each injected namespace, same as the access-token secret.
+- `inspector.penaltyBoxDataEnabled` — surfaces the inspector's `INSPECTOR_PENALTY_BOX_DATA_ENABLED` flag as a chart value (default `false`). Uploads penalty-box events/counts to the API; requires a client-hash seed (enforcement is unaffected).
+
 ## [0.44.2] - 2026-05-28
 
 ### Fixed
