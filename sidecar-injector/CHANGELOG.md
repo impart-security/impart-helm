@@ -1,9 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [0.45.0] - 2026-06-10
 
 ### Added
 
+- `inspector.advancedSettings` — opt-in map of preview inspector settings (rendered to `INSPECTOR_ADVANCED_SETTINGS`).
 - `inspector.clientHashSeedSecretRef` — name of a Secret (key `clientHashSeed`) whose value keys the client-identifier hash so penalty-box hashes are non-reversible, rendered as `INSPECTOR_CLIENT_HASH_SEED` via an `optional` `secretKeyRef` (a missing secret degrades to "no seed", never blocks startup). The Secret must exist in each injected namespace, same as the access-token secret.
 - `inspector.penaltyBoxDataEnabled` — surfaces the inspector's `INSPECTOR_PENALTY_BOX_DATA_ENABLED` flag as a chart value (default `false`). Uploads penalty-box events/counts to the API; requires a client-hash seed (enforcement is unaffected).
 
@@ -18,6 +19,14 @@
 
 - `HOST_IP` environment variable exposed via Kubernetes downward API (`status.hostIP`) on the inspector sidecar container. Enables `$(HOST_IP)` interpolation in values like `statsdAddr`.
 - `inspector.grpcListenAddr` and `inspector.grpcUnixSocketPermissions` values, rendered as `INSPECTOR_GRPC_LISTEN_ADDR` / `INSPECTOR_GRPC_UNIX_SOCKET_PERMISSIONS`. Set `grpcListenAddr` to a `unix://` URI with the `grpc+socket+volume` plugin-mode for Envoy Gateway ext_proc over a Unix domain socket. Mirrors `inspector.unixSocketPath` / `inspector.unixSocketPermissions` for `socket+volume`.
+
+### Changed
+
+- Bumped container versions
+  - `0.45.0` - [impartsecurity/inspector](https://hub.docker.com/r/impartsecurity/inspector/tags)
+  - `0.45.0` - [impartsecurity/control-node](https://hub.docker.com/r/impartsecurity/control-node/tags)
+  - `0.45.0` - [impartsecurity/k8s-webhook-injector](https://hub.docker.com/r/impartsecurity/k8s-webhook-injector/tags)
+  - `0.45.0` - [impartsecurity/k8s-sidecar-init](https://hub.docker.com/r/impartsecurity/k8s-sidecar-init/tags)
 
 ## [0.44.1] - 2026-03-17
 

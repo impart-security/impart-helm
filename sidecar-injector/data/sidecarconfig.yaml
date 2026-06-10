@@ -125,6 +125,10 @@ containers:
     value: {{ .Values.inspector.grpcUnixSocketPermissions }}
   - name: INSPECTOR_CLUSTER_GROUP
     value: {{ .Values.inspector.clusterGroup }}
+  {{- if .Values.inspector.advancedSettings }}
+  - name: INSPECTOR_ADVANCED_SETTINGS
+    value: {{ .Values.inspector.advancedSettings | toJson | quote }}
+  {{- end }}
   {{- if and .Values.inspector.statsd .Values.inspector.statsd.tagsCsv }}
   - name: INSPECTOR_STATSD_TAGS
     value: "{{ .Values.inspector.statsd.tagsCsv }}"
