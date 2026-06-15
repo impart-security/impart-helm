@@ -6,8 +6,8 @@ icon: https://console.impartsecurity.net/logomark-brand-background.png
 
 type: application
 
-version: 0.45.0
-appVersion: "0.45.0"
+version: 0.45.1
+appVersion: "0.45.1"
 
 keywords:
   - security
