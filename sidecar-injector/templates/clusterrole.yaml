@@ -8,3 +8,12 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations"]
   verbs: ["create", "get", "delete", "list", "patch", "update", "watch"]
+{{- if eq (include "sidecar-injector.clientHashSeed.autogenEnabled" .) "true" }}
+# Client-hash seed autogeneration: the injector creates the source seed in its
+# own namespace and copies it into each injected namespace. create cannot be
+# resourceName-scoped, so this is cluster-wide; only get + create are needed
+# (copies are never updated or deleted).
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "create"]
+{{- end }}

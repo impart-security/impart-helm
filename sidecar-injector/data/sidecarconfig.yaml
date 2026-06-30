@@ -77,11 +77,12 @@ containers:
         name: {{ .Values.inspector.auth.accessTokenSecretRef }}
         key: accessToken
   {{- end }}
-  {{- if .Values.inspector.clientHashSeedSecretRef }}
+  {{- $clientHashSeedSecret := include "sidecar-injector.clientHashSeed.effectiveSecretName" . }}
+  {{- if $clientHashSeedSecret }}
   - name: INSPECTOR_CLIENT_HASH_SEED
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.inspector.clientHashSeedSecretRef }}
+        name: {{ $clientHashSeedSecret }}
         key: clientHashSeed
         # Optional: a missing seed secret degrades to "no seed" (penalty-box data
         # disabled) rather than blocking inspector startup.

@@ -43,6 +43,62 @@ spec:
 $ helm delete impart
 ```
 
+### Client-hash seed retention
+
+When `inspector.clientHashSeed.autoGenerate` is enabled, the injector creates
+client-hash seed `Secret`s imperatively (the source in the release namespace and
+a copy in each injected namespace), so `helm uninstall` does **not** remove them.
+This is intentional: the seed keys all historical attacker correlation, and
+keeping it lets a reinstall continue that correlation. To remove the seeds, either
+set `inspector.clientHashSeed.purgeOnUninstall: true` before uninstalling (installs
+a `pre-delete` hook that purges **this release's** seeds — it is scoped by the
+`app.kubernetes.io/instance` label, so it never touches another injector release's
+seeds), or delete them manually:
+
+```console
+# this release's seeds only (recommended)
+$ kubectl delete secret -l impart.security/client-hash-seed=true,app.kubernetes.io/managed-by=impart-sidecar-injector,app.kubernetes.io/instance=<release> --all-namespaces
+# every release's seeds (drop the instance label)
+$ kubectl delete secret -l impart.security/client-hash-seed=true,app.kubernetes.io/managed-by=impart-sidecar-injector --all-namespaces
+```
+
+### Rotating the client-hash seed
+
+Rotation is a deliberate, manual operation — the injector never rotates the seed on
+its own. **Rotating re-pseudonymizes every hash, so it breaks correlation with all
+pre-rotation attacker data.** Only rotate if the seed is believed compromised or you
+explicitly want a clean break.
+
+Three things resist a value change by design, and each step below addresses one: the
+source is never overwritten (and is cached in the injector's memory for its lifetime),
+per-namespace copies are never overwritten (and error on value divergence), and a
+running pod reads its seed from env only at startup.
+
+```console
+# 1a. Set a specific new source value (in the release namespace). `apply` overwrites
+#     the existing source Secret — the injector itself never overwrites it.
+$ kubectl -n <release-ns> create secret generic impart-client-hash-seed \
+    --from-literal=clientHashSeed=<new-seed> \
+    --dry-run=client -o yaml | kubectl apply -f -
+# 1b. ...or let the injector generate a fresh random value: delete the source Secret
+#     so it is recreated (get-or-create) on the injector restart in step 2.
+$ kubectl -n <release-ns> delete secret impart-client-hash-seed
+
+# 2. Restart the injector so it drops the cached old source and reads the new one.
+$ kubectl -n <release-ns> rollout restart deploy/<release>-sidecar-injector
+
+# 3. Delete the per-namespace COPIES (every injected namespace EXCEPT the release
+#    namespace, so the source is preserved) so they are recreated from the new source.
+$ kubectl delete secret impart-client-hash-seed -n <app-ns>   # repeat per namespace
+
+# 4. Rolling-restart injected workloads so new pods pick up the new copy.
+$ kubectl -n <app-ns> rollout restart deploy/<app>            # repeat per workload
+```
+
+Until steps 3–4 are done for a namespace, its pods keep using the old seed and the
+injector logs a divergence warning on each admission there — that warning is the
+signal that a copy is stale, not an error that blocks anything.
+
 ## Annotations
 
 The sidecar injector supports the following annotations for customizing inspector behavior on a per-pod basis:

@@ -60,7 +60,10 @@ webhooks:
         resources:
           - pods
     failurePolicy: {{ .Values.webhookinjector.failurePolicy }}
-    sideEffects: None
+    # The webhook writes the per-namespace seed Secret on real admissions when
+    # seed autogeneration is enabled, so it must declare that side effect (skipped
+    # on dry-run by the injector). Otherwise it is purely a patch producer.
+    sideEffects: {{ if eq (include "sidecar-injector.clientHashSeed.autogenEnabled" .) "true" }}NoneOnDryRun{{ else }}None{{ end }}
     objectSelector:
       matchLabels:
         {{ .Values.webhookinjector.objectSelectorLabel }}: enabled
@@ -148,6 +151,18 @@ spec:
             value: "{{ .Values.webhookinjector.logFormat }}"
           - name: WEBHOOK-INJECTOR_NATIVE-SIDECAR
             value: "{{ .Values.inspector.nativeSidecar }}"
+          {{- if eq (include "sidecar-injector.clientHashSeed.autogenEnabled" .) "true" }}
+          - name: WEBHOOK-INJECTOR_CLIENT-HASH-SEED-AUTOGENERATE
+            value: "true"
+          - name: WEBHOOK-INJECTOR_CLIENT-HASH-SEED-NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: WEBHOOK-INJECTOR_CLIENT-HASH-SEED-SECRET-NAME
+            value: "{{ .Values.inspector.clientHashSeed.secretName }}"
+          - name: WEBHOOK-INJECTOR_HELM-RELEASE
+            value: "{{ .Release.Name }}"
+          {{- end }}
           resources:
             {{- toYaml .Values.webhookinjector.resources | nindent 12 }}
           volumeMounts:
