@@ -24,8 +24,17 @@ Install helm chart
 ```console
 $ helm repo add impart https://helm.impartsecurity.net
 $ helm repo update
-$ helm install --namespace impart impart impart/sidecar-injector --set inspector.tlsSecret=<tls-secret> --set inspector.auth.accessTokenSecretRef=<accessTokenSecretName>
+$ helm install --namespace impart impart impart/sidecar-injector --set inspector.tlsSecretRef=<tls-secret> --set inspector.auth.accessTokenSecretRef=<accessTokenSecretName>
 ```
+
+> **`inspector.tlsSecretRef` is cluster-global.** It is rendered once into the
+> injector's cluster-wide sidecar config, so once set, **every** injected pod in
+> **every** namespace mounts a `proxy-tls-secret` volume referencing a secret of
+> that name. The secret must therefore exist in each namespace where injection
+> happens, or pods there stay stuck in `ContainerCreating`
+> (`secret "<name>" not found`) — including pods for patterns that don't use TLS.
+> The per-pod `impart-inspector-sidecar-tls-secret` annotation can point a pod at
+> a differently-named secret, but it cannot remove the volume.
 
 to inject inspector into an api pod provide the following annotations
 
@@ -36,6 +45,31 @@ spec:
       labels:
         impart-inspector-injection: "enabled"
 ```
+
+### Excluding a pod from injection
+
+To keep the webhook from injecting a pod that would otherwise match (for
+example, a chart that blanket-propagates labels to all pod templates), set the
+opt-out annotation on the pod template:
+
+```yaml
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar-injector-webhook.impart.security/inject: "false"
+```
+
+Accepted opt-out values are `false`, `off`, `n`, or `not` (case-insensitive);
+any other value (or no annotation) leaves injection enabled. If a third-party
+chart doesn't let you set pod-template annotations, removing the
+`impart-inspector-injection: enabled` label from that pod template avoids the
+webhook entirely.
+
+**Helm hook / operator Jobs:** the injector only sees Pods, so a Job whose pod
+template inherits the injection label gets a sidecar that never exits — the Job
+never completes and `helm install` hangs. Add the opt-out annotation (or drop
+the label) on hook/CRD Job pod templates.
 
 ## Uninstalling the Chart
 
@@ -110,16 +144,16 @@ The sidecar injector supports the following annotations for customizing inspecto
 | `impart-inspector-sidecar-destination-addr` | Override destination address for the sidecar | string | `localhost:8080` |
 | `impart-inspector-grpc-listen-addr` | gRPC listener address for external processing | string | `:20212` |
 | `impart-inspector-grpc-extproc-max-body-size` | Maximum body size for gRPC external processing | string | `1048576` |
-| `impart-inspector-mode` | Sets the inspector operation mode | string | `grpc_server` |
+| `impart-inspector-mode` | Sets the inspector operation mode | string | `ebpf`, `reverse_proxy`, `sidecar_proxy`, `tcp_server`, `log_stream_server`, `grpc_server`, `unix_socket_server`, `windows_named_pipe_server` |
 | `impart-inspector-image` | Override the inspector container image | string | `impart/inspector:v1.2.3` |
 | `impart-tcp-listen-addr` | TCP listener address | string | `:8080` |
 | `impart-inspector-cluster-group` | Cluster group identifier for grouping related services | string | `production-cluster` |
 | `impart-inspector-logstream-id` | Log stream identifier for centralized logging | string | `app-logs-123` |
 | `impart-inspector-logstream-log-tail-file` | File path for log tailing | string | `/var/log/app.log` |
-| `impart-inspector-sidecar-tls-secret` | Kubernetes secret name containing TLS certificates | string | `my-tls-secret` |
+| `impart-inspector-sidecar-tls-secret` | Kubernetes secret name containing TLS certificates. Renames which secret the pod's `proxy-tls-secret` volume references; it cannot remove the volume | string | `my-tls-secret` |
 | `impart-inspector-access-token-secret` | Kubernetes secret name containing the Impart access token | string | `impart-access-token` |
 | `impart-proxy-init-enabled` | Enables the proxy init container for traffic interception | boolean string | `"true"`, `"false"` |
-| `impart-inspector-plugin-mode` | Configures inspector for plugin-based operation without traffic interception | string | `tcp`, `socket`, `socket+volume` |
+| `impart-inspector-plugin-mode` | Configures inspector for plugin-based operation without traffic interception. Only the listed values are recognized — anything else is silently ignored and the pod falls back to the chart's default mode (use `impart-inspector-mode` for modes like `grpc_server`) | string | `tcp`, `socket`, `socket+volume`, `grpc+socket+volume` |
 | `impart-inspector-extra-env` | Additional environment variables for the inspector container as JSON/YAML array | JSON/YAML array | `[{"name":"DEBUG","value":"true"}]` |
 | `impart-inspector-sidecar-config` | Complete inspector configuration as JSON/YAML object, allows overriding all settings defined in helm values for inspector | JSON/YAML object | See detailed examples below |
 
